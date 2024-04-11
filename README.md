@@ -1,2 +1,2 @@
 # LMS-MERN-Stack
-Its an LMS to practice MERN stack
+Its an LMS that I am building to practice MERN stack
