@@ -1,0 +1,164 @@
+----Auth-----
+
+POST /api/auth/login
+body: {username,password}
+
+--------------------------------
+
+POST /api/auth/register/user
+body: {username,password,confirmPassword,email,phoneNumber,birthDate,gender(male,female),city,country}
+
+--------------------------------
+
+POST /api/auth/register/company
+body: {name,ownerId,email,logo(base64),city,country,phoneNumber,size(1-10 employees,11-50 employees,more than 50 employees),description}
+
+--------------------------------
+
+POST /api/auth/verification
+body: {email,otp}
+
+--------------------------------
+
+POST /api/auth/verification/resend
+body: {email}
+
+
+----trainee----
+
+GET /api/companies
+return: [{id,name,logo},....]
+
+--------------------------------
+
+GET /api/trainee/:companyId/courses
+return: [{id,name,image,progress},....]
+
+--------------------------------
+
+GET /api/trainee/courses/:courseId
+return: {name,content:[{type:unit,id,name},
+{type:lesson,id,name,content:(video),description},
+{type:lesson,id,name,content:(pdf)},
+{type:lesson,id,name,content:(quiz),quiz:{name,grade,questions:[{id,name,grade,answers:[{name},....]},....]}},
+]}
+
+--------------------------------
+
+GET /api/trainee/courses/:courseId/lessons/:lessonId if(type is quiz)
+return: {id,name,grade,questions:[{id,name,grade,answers:[{name},....]},....]}
+
+POST /api/trainee/courses/:courseId/lessons/:lessonId/quizSolution
+body: [{id,[isCorrect,isCorrect]},..{}] return: {grade}
+
+POST /api/trainee/courses/:courseId/lessons/:lessonId/done
+
+GET /api/trainee/courses/:courseId/lessons/:lessonId if(type is video)
+coming soon
+GET /api/trainee/courses/:courseId/lessons/:lessonId if(type is pdf)
+coming soon
+
+
+
+----Trainer----
+
+GET /api/trainer/:companyId/courses
+return: [{id,name,,image},....]
+
+--------------------------------
+
+GET /api/trainer/courses/:courseId
+return: {id,name,image,description,content:[
+{type:unit,id,name},
+{type:lesson,id,name,content:(video),description},
+{type:lesson,id,name,content:(pdf)},
+{type:lesson,id,name,content:(quiz),quiz:{name,grade,questions:[{name,grade,answers:[{name,isCorrect},....]},....]}},
+]
+}
+
+--------------------------------
+
+POST /api/trainer/courses/:courseId/units
+body: {title}
+
+--------------------------------
+
+DELETE /api/trainer/courses/:courseId/units/:unitId
+
+--------------------------------
+
+POST /api/trainer/courses/:courseId/units/:unitId/lessons
+FormData: {title,type(pdf,video),file,description(if type = video)}
+
+--------------------------------
+
+DELETE /api/trainer/courses/:courseId/units/:unitId/lessons/:lessonId
+
+--------------------------------
+
+POST /api/trainer/courses/:courseId/units/:unitId/quiz
+body: {name,grade,questions:[{name,grade,answers:[{name,isCorrect},....]},....]}
+
+--------------------------------
+
+PUT /api/trainer/courses/:courseId/units/:unitId/reorder
+body:return: {id,name,image,description,content:[
+{type:unit,id,name},
+{type:lesson,id,name,content:(video),description},
+{type:lesson,id,name,content:(pdf)},
+{type:lesson,id,name,content:(quiz),quiz:{name,grade,questions:[{name,grade,answers:[{name,isCorrect},....]},....]}},]}
+
+--------------------------------
+
+----admin----
+
+GET /api/admin/courses/:companyId
+return: [{id,name,image},....]
+
+--------------------------------
+
+POST /api/admin/courses/:companyId
+body:{name,description}
+
+------------users in course CRUD--------------------
+
+GET /api/admin/courses/:courseId/users
+return: [{name,role,completionDate,isParticipant},....]
+
+--------------------------------
+
+POST /api/admin/courses/:courseId/users/:userId
+(Add to course )
+
+--------------------------------
+
+PUT /api/admin/courses/:courseId/users/:userId
+body: {role(trainer or trainee)}
+
+--------------------------------
+
+DELETE /api/admin/courses/:courseId/users/:userId
+(remove from course )
+
+------------users in company CRUD--------------------
+
+GET /api/admin/:companyId/users
+return: [{name,role,lastLogin},....]
+
+--------------------------------
+
+POST /api/admin/:companyId/users/:userId
+{email,role}
+(Add to company )
+
+--------------------------------
+
+PUT /api/admin/:companyId/users/:userId
+body: {role(trainer , trainee or admin)}
+
+--------------------------------
+
+DELETE /api/admin/:companyId/users/:userId
+(remove from company )
+
+

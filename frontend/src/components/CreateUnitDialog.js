@@ -39,9 +39,6 @@ export default function FormDialog() {
       >
         <DialogTitle>Unit name</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Enter Unit name to add it to the course.
-          </DialogContentText>
           <TextField
             autoFocus
             required
