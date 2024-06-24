@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const userSchema = mongoose.Schema({
     username : {
         type : String,
-        required : true,
-        unique : true
+        required : true
     },
     email : {
         type : String,
-        required : true
+        required : true,
+        unique : true
     },
     password : {
         type : String,
@@ -25,7 +25,7 @@ const userSchema = mongoose.Schema({
         required : true,
         minlength: 10
     },
-    birthday : {
+    birthDate : {
         type : String,
         required : true
     },
@@ -34,21 +34,23 @@ const userSchema = mongoose.Schema({
         required : true,
         enum : ['male', 'female']
     },
+    country : {
+        type : String,
+        required : true
+    },
     city : {
         type : String,
         required : true
     },
-    isOwner : {
-        type : Boolean
+    isVerified: { 
+        type: Boolean,
+        default: false 
     },
-    isAdmin : {
-        type : Boolean
+    otp: { 
+        type: String 
     },
-    isTrainer : {
-        type : Boolean
-    },
-    isTrainee : {
-        type : Boolean
+    verificationCodeExpires: {
+        type : Date
     }
 },{
     timestamps : true

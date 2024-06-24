@@ -1,17 +1,24 @@
 const mongoose = require('mongoose');
 
 const companySchema = mongoose.Schema({
+    companyId : {
+        type : mongoose.Schema.Types.ObjectId
+    },
+    ownerId : {
+        type : mongoose.Schema.Types.ObjectId
+    },
+    ownerName : {
+        type : String,
+        required : true
+    },
     companyName : {
         type : String,
         required : true
     },
-    companyEmail : {
+    email : {
         type : String,
-        required : true
-    },
-    companyPhone : {
-        type : Number,
-        required : true
+        required : true,
+        unique : true
     },
     logo : {
         type : String
@@ -20,16 +27,27 @@ const companySchema = mongoose.Schema({
         type : String,
         required : true
     },
-    location : {
+    cityOfHQ : {
         type : String,
         required : true
     },
-    size : {
-        type : Number
+    phoneNumber : {
+        type : String,
+        required : true
+    },
+    sizeOfEmployment : {
+        type : String,
+        required : true
     },
     description : {
-        type : String
-    }
+        type : String,
+        required : true
+    },
+    admins : {
+        type : Array,
+        ref : "Users"
+    },
+
 },{
     timestamps : true
 })
