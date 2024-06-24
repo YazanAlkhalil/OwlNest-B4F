@@ -2,22 +2,22 @@ const mongoose = require('mongoose')
 
 const traineeSchema = mongoose.Schema({
     courseId : {
-    type : mongoose.Schema.Types.ObjectId,
-    ref : "Course"
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "Course"
     },
     userId : {
-    type : mongoose.Schema.Types.ObjectId,
-    ref: "User"
+        type : mongoose.Schema.Types.ObjectId,
+        ref: "User"
     },
     grade : {
-    type : mongoose.Schema.Types.Double,
-    required : true
+        type : mongoose.Schema.Types.Double,
+        required : true
     },
     completionProgress : {
-    type : Object
+        type : Object
     },
     completionDate : {
-    type : Date
+        type : Date
     }
 })
 

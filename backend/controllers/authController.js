@@ -4,7 +4,7 @@ const generateTokenAndSetCookie = require('../utils/generateToken');
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: 'Gmail',
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -32,19 +32,6 @@ const signUpUser = async (req , res) => {
         const otp = `${otp1}${otp2}${otp3}${otp4}`
         const verificationCodeExpires = new Date(Date.now() + 10 * 60 * 1000)
 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'Your OTP Code',
-            text: `Your OTP code is ${otp}`
-        };
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log('Error sending email');
-            }
-        });
-    
-
         const newUser = new User ({
             username,
             email,
@@ -58,7 +45,21 @@ const signUpUser = async (req , res) => {
             otp,
             verificationCodeExpires
         })
-        
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Your OTP Code',
+            text: `Your OTP Code is ${otp}`,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('Error sending email: ' + error.message);
+            }else {
+                console.log("Send Otp Successfully");
+            }
+        });
 
 
         if(newUser){
@@ -74,7 +75,6 @@ const signUpUser = async (req , res) => {
     catch(err){
         res.status(500).json({msg: err.message});
     }
- 
 }
 
 const loginUser = async (req , res) => {

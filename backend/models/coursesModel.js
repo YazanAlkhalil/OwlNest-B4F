@@ -2,30 +2,30 @@ const mongoose = require('mongoose')
 
 const courseSchema = mongoose.Schema({
     courseId : {
-    type : mongoose.Schema.Types.ObjectId
+        type : mongoose.Schema.Types.ObjectId
     },
     companyId : {
-    type : mongoose.Schema.Types.ObjectId,
-    ref: "Company"
+        type : mongoose.Schema.Types.ObjectId,
+        ref: "Company"
     },
     courseName : {
-    type : String,
-    required : true
+        type : String,
+        required : true
     },
     descreption : {
-    type : String,
-    required : true
+        type : String,
+        required : true
     },
     image : {
-    type : String,
-    required : true
+        type : String,
+        required : true
     },
     trainers : {
-    type : String
+        type : String
     },
     admin : {
-    type : String,
-    ref: "User"
+        type : String,
+        ref: "User"
     },
     content : {
         type : Object
