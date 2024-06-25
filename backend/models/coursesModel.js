@@ -1,9 +1,6 @@
 const mongoose = require('mongoose')
 
 const courseSchema = mongoose.Schema({
-    courseId : {
-        type : mongoose.Schema.Types.ObjectId
-    },
     companyId : {
         type : mongoose.Schema.Types.ObjectId,
         ref: "Company"
@@ -17,15 +14,17 @@ const courseSchema = mongoose.Schema({
         required : true
     },
     image : {
-        type : String,
-        required : true
-    },
-    trainers : {
         type : String
     },
+    trainers : {
+        type : [{
+            type : mongoose.Schema.Types.ObjectId,
+            ref : "Users"
+        }]
+    },
     admin : {
-        type : String,
-        ref: "User"
+        type : mongoose.Schema.Types.ObjectId,
+        ref: "Users"
     },
     content : {
         type : Object

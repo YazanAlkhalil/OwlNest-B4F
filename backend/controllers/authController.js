@@ -1,4 +1,5 @@
 const User = require('../models/usersModel')
+const Company = require('../models/companyModel')
 const bcryptjs = require('bcryptjs')
 const generateTokenAndSetCookie = require('../utils/generateToken');
 const nodemailer = require('nodemailer');
@@ -64,10 +65,7 @@ const signUpUser = async (req , res) => {
 
         if(newUser){
             await newUser.save();
-            res.status(201).json({
-                _id : newUser._id,
-                username : newUser.username
-            })
+            res.status(201).json({message : "verify your email"})
         }else { 
             res.status(400).json({message : "Invalid user data"})
         }
@@ -160,17 +158,12 @@ const resendOtp = async (req,res) => {
             message : "reset successfully"
         })
 
-
-
     } catch (error) {
         res.status(500).json({message: error.message})
     }
 }
 
-
-
-
-
+//logout contoller
 const logOutUser = async (req , res) => {
     try{
         res.cookie("jwt","",{maxAge:0})
@@ -181,6 +174,53 @@ const logOutUser = async (req , res) => {
     }
 }
 
+//create company controller
+const createCompany = async (req,res) => {
+    try{
+        const {
+            ownerId,
+            ownerName,
+            companyName,
+            logo,
+            country,
+            cityOfHQ,
+            phoneNumber,
+            sizeOfEmployment,
+            description
+        } = req.body;
+
+        const companyNameExist = await Company.findOne({companyName})
+
+
+        if(companyNameExist){
+            return res.status(400).json({message: 'Company already exists'})
+        }
+
+        const newCompany = new Company({
+            ownerId,
+            ownerName,
+            companyName,
+            logo,
+            country,
+            cityOfHQ,
+            phoneNumber,
+            sizeOfEmployment,
+            description
+        })
+
+        if(newCompany){
+            await newCompany.save()
+            res.status(201).json({message: 'Company created successfully'})
+        }else{
+            res.status(400).json({message: 'Invalid company'})
+        }
+    }
+    catch(err) {
+        res.status(500).json({message: err.message})
+    }
+}
+
+
 
 
 module.exports = { 
@@ -188,5 +228,6 @@ module.exports = {
     loginUser,
     logOutUser,
     verifyEmail,
-    resendOtp
+    resendOtp,
+    createCompany
 }

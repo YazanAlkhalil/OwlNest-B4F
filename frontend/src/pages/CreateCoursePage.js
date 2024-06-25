@@ -15,9 +15,9 @@ function CreateCoursePage() {
     <>
     <div className='flex gap-6 items-start'>
       <BiArrowBack className='size-7 hover:cursor-pointer ' onClick={()=> {navigate('/trainer')}}/>
-      <NavButton name={'Edit'} highlight={content == 'edit'} handleClick={()=> setContent('edit')}/>
-      <NavButton name={'Reports'} highlight={content == 'reports'} handleClick={()=> setContent('reports')}/>
-      <NavButton name={'Trainees'} highlight={content == 'trainees'} handleClick={()=> setContent('trainees')}/>
+      <NavButton name={'Edit'} highlight={content === 'edit'} handleClick={()=> setContent('edit')}/>
+      <NavButton name={'Reports'} highlight={content === 'reports'} handleClick={()=> setContent('reports')}/>
+      <NavButton name={'Trainees'} highlight={content === 'trainees'} handleClick={()=> setContent('trainees')}/>
     </div>
     <div className='pt-10'>
       {content === "edit" && <CourseEdit />}

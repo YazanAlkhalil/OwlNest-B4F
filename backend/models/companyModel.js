@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 
 const companySchema = mongoose.Schema({
-    companyId : {
-        type : mongoose.Schema.Types.ObjectId
-    },
     ownerId : {
         type : mongoose.Schema.Types.ObjectId
     },
@@ -12,10 +9,6 @@ const companySchema = mongoose.Schema({
         required : true
     },
     companyName : {
-        type : String,
-        required : true
-    },
-    email : {
         type : String,
         required : true,
         unique : true
@@ -37,16 +30,17 @@ const companySchema = mongoose.Schema({
     },
     sizeOfEmployment : {
         type : String,
-        required : true
+        required : true,
+        enum : ["1-10 employees","11-50 employees","more than 50 employees"]
     },
     description : {
         type : String,
         required : true
     },
-    admins : {
-        type : Array,
+    admins : [{
+        type : mongoose.Schema.Types.ObjectId,
         ref : "Users"
-    },
+    }],
 
 },{
     timestamps : true

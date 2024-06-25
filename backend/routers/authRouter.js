@@ -7,5 +7,6 @@ router.post('/login', auth.loginUser)
 router.post('/logout', auth.logOutUser)
 router.post('/verification',auth.verifyEmail)
 router.post('/reset', auth.resendOtp)
+router.post('/register/company', auth.createCompany)
 
 module.exports = router

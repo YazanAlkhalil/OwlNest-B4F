@@ -8,12 +8,12 @@ function AdminCourseDetails(props) {
     return (
         <>
             <div className='flex gap-3'>
-                <NavButton name={'Reports'} highlight={content == 'reports'} handleClick={() => setContent('reports')} />
-                <NavButton name={"Users"} highlight={content == 'users'} handleClick={() => setContent('users')} />
+                <NavButton name={'Reports'} highlight={content === 'reports'} handleClick={() => setContent('reports')} />
+                <NavButton name={"Users"} highlight={content === 'users'} handleClick={() => setContent('users')} />
             </div>
             <div>
-                {content == 'users' && <AdminCourseUsers/>}
-                {content == 'reports' && <CourseReports admin={false}/>}
+                {content === 'users' && <AdminCourseUsers/>}
+                {content === 'reports' && <CourseReports admin={false}/>}
             </div>
         </>
 
