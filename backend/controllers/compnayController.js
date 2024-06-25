@@ -128,9 +128,41 @@ const updateUserRole = async (req, res) => {
     }
 };
 
+const removeUserFromCompany = async (req, res) => {
+    try {
+        const { companyId, userId } = req.params;
+
+        const company = await Company.findById(companyId);
+        const user = await Users.findById(userId);
+        const contract = await Contract.findOne({companyId , userId})
+
+        if(!contract){
+            return res.status(404).json({ msg: 'User not found'});
+        }
+
+        if (!company) {
+            return res.status(404).json({ msg: 'Company not found' });
+        }
+
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+
+        company.admins = company.admins.filter(adminId => adminId.toString() !== userId);
+        await company.save();
+
+        await Contract.deleteMany({ companyId, userId });
+
+        res.status(200).json({ message: 'User removed from company successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 module.exports = {
     addUserToCompnay,
     getUsersFromCompany,
-    updateUserRole
+    updateUserRole,
+    removeUserFromCompany
 }
