@@ -9,6 +9,10 @@ const addUserToCompnay = async (req,res) => {
 
         const company = await Company.findById(companyId)
         const user = await Users.findById(userId)
+        const contract = await Contract.findOne({companyId, userId})
+        if(contract){
+            return res.status(400).json({ message: 'User is already in this company'});
+        }
         
         if(!company){
             return res.status(404).json({msg : 'Company not found'})
@@ -68,13 +72,65 @@ const getUsersFromCompany = async (req, res) => {
         }));
 
         res.status(200).json([...users, ...adminUsernames]);
-        
+
     }  catch (error) {
         res.status(500).json({message: error.message});
     }
 }
 
+const updateUserRole = async (req, res) => {
+    try {
+        const { companyId, userId } = req.params;
+        const { role } = req.body;
+
+        const company = await Company.findById(companyId);
+        const user = await Users.findById(userId);
+
+        if (!company) {
+            return res.status(404).json({ msg: 'Company not found' });
+        }
+
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+
+        if (role === 'admin') {
+            if (!company.admins.includes(userId)) {
+                company.admins.push(userId);
+                await company.save();
+            }            
+            await Contract.deleteMany({ companyId, userId });
+
+            return res.status(200).json({ message: 'User role updated to admin successfully' });
+        } else if (role === 'trainer' || role === 'trainee') {
+            company.admins = company.admins.filter(adminId => adminId.toString() !== userId);
+            await company.save();
+
+            let contract = await Contract.findOne({ companyId, userId });
+            if (contract) {
+                contract.role = role;
+                await contract.save();
+            } else {
+                contract = new Contract({
+                    companyId,
+                    userId,
+                    role,
+                    joinDate: new Date()
+                });
+                await contract.save();
+            }
+            return res.status(200).json({ message: `User role updated to ${role} successfully` });
+        } else {
+            return res.status(400).json({ message: 'Invalid role specified' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 module.exports = {
     addUserToCompnay,
-    getUsersFromCompany
+    getUsersFromCompany,
+    updateUserRole
 }
