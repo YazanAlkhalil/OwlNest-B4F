@@ -7,11 +7,12 @@ const contractSchema = mongoose.Schema({
     },
     userId : {
         type : mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "Users"
     },
     role : {
         type : String,
-        required : true
+        required : true,
+        enum : ["trainer" , "trainee"]
     },
     joinDate : {
         type : Date 

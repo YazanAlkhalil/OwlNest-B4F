@@ -1,4 +1,4 @@
-import Sidebar from './components/Sidebar';
+// import Sidebar from './components/Sidebar';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import CreateCoursePage from './pages/CreateCoursePage';
 import TraineeLayout from './components/TraineeLayout';
@@ -21,27 +21,27 @@ function App() {
   return (
     <>
     <BrowserRouter>
-       <Routes>
-        // auth routes
+      <Routes>
+        {/* auth routes */}
         <Route path='/login' element={<LoginPage/>} />
         <Route path='/register' element={<RegisterPage/>} />
         <Route path='/create' element={<CreateCompanyPage/>} />
         <Route path='/registerCompany' element={<RegisterCompanyPage/>} />
         <Route path='/verify' element={<VerificationPage/>} />
 
-        //trainee routes
+        {/* trainee routes */}
         <Route path="/trainee" element={<TraineeLayout />}>
         
         </Route>
 
-        //trainer routes
+        {/* //trainer routes */}
         <Route path="/trainer" element={<TrainerLayout />}>
           <Route  path='/trainer/courses/:id' element={<CreateCoursePage />} />
           <Route  path='/trainer/courses' element={<TrainerCoursesPage/>} />
           <Route path="/trainer" element={<Navigate to="/trainer/courses" replace />} />
         </Route>
 
-        //admin routes
+        {/* //admin routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route path='/admin/dashboard' element={<AdminDashboard />}/>
           <Route path='/admin/courses/:id' element={<AdminCourseDetails />}/>
