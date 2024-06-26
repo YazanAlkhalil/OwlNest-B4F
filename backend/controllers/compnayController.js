@@ -1,7 +1,6 @@
 const Users = require('../models/usersModel')
 const Company = require('../models/companyModel')
 const Contract = require('../models/contractModel')
-
 const addUserToCompnay = async (req,res) => {
     try {
         const { email , role } = req.body
