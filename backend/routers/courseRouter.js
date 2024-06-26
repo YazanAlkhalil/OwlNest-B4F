@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router()
-const adminController = require('../controllers/adminConroller')
+const adminController = require('../controllers/courseConroller')
 const protectRoute = require('../middlewares/protectRoute')
 
 router.get('/courses/:companyId' , protectRoute.protectRoute , adminController.getCourses)

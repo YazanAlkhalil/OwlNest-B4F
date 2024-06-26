@@ -190,12 +190,12 @@ const createCompany = async (req,res) => {
         } = req.body;
 
         const companyNameExist = await Company.findOne({companyName})
-
-
+        
+        
         if(companyNameExist){
             return res.status(400).json({message: 'Company already exists'})
         }
-
+        
         const newCompany = new Company({
             ownerId,
             ownerName,
@@ -207,7 +207,7 @@ const createCompany = async (req,res) => {
             sizeOfEmployment,
             description
         })
-
+        
         if(newCompany){
             await newCompany.save()
             res.status(201).json({message: 'Company created successfully'})
@@ -217,7 +217,6 @@ const createCompany = async (req,res) => {
     }
     catch(err) {
         res.status(500).json({message: err.message})
-        console.log(err.message);
     }
 }
 

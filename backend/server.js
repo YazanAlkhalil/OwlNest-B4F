@@ -5,7 +5,7 @@ const connectedDB = require('./db/connectionDB')
 // const cors = require('cors')
 const app = express()
 const auth = require('./routers/authRouter')
-const admin = require('./routers/adminRouter')
+const admin = require('./routers/courseRouter')
 const company = require('./routers/companyRouter')
 
 app.use(express.json())

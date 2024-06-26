@@ -5,7 +5,7 @@ const Contract = require('../models/contractModel')
 const addUserToCompnay = async (req,res) => {
     try {
         const { email , role } = req.body
-        const { companyId , userId } = req.params
+        const { companyId } = req.params
 
         const company = await Company.findById(companyId)
         const user = await Users.findById(userId)
@@ -56,6 +56,7 @@ const getUsersFromCompany = async (req, res) => {
 
         const contracts = await Contract.find({ companyId }).populate('userId');
         const company = await Company.findById(companyId).populate('admins', 'username');
+        console.log(contracts);
 
         if (!company) {
             return res.status(404).json({ message: 'Company not found' });
@@ -102,6 +103,7 @@ const updateUserRole = async (req, res) => {
             await Contract.deleteMany({ companyId, userId });
 
             return res.status(200).json({ message: 'User role updated to admin successfully' });
+            
         } else if (role === 'trainer' || role === 'trainee') {
             company.admins = company.admins.filter(adminId => adminId.toString() !== userId);
             await company.save();
