@@ -10,7 +10,7 @@ const traineeSchema = mongoose.Schema({
         ref: "User"
     },
     grade : {
-        type : mongoose.Schema.Types.Double,
+        type : Number,
         required : true
     },
     completionProgress : {
