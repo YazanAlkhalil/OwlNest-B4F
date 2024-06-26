@@ -31,6 +31,7 @@ function App() {
 
         {/* trainee routes */}
         <Route path="/trainee" element={<TraineeLayout />}>
+        
         </Route>
 
         {/* //trainer routes */}
