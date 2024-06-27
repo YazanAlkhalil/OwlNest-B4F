@@ -16,6 +16,7 @@ import RegisterPage from './pages/RegisterPage';
 import CreateCompanyPage from './pages/CreateCompanyPage';
 import RegisterCompanyPage from './pages/RegisterCompanyPage';
 import VerificationPage from './pages/VerificationPage';
+import AdminUserDetail from './pages/AdminUserDetail';
 function App() {
   
   return (
@@ -49,6 +50,7 @@ function App() {
           <Route path='/admin/users' element={<AdminUsers />}/>
           <Route path='/admin/users/:id' element={<AdminCoursesPage />}/>
           <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="/admin/user-details" element={<AdminUserDetail/>} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

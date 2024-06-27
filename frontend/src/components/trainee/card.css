@@ -1,0 +1,9 @@
+.divCard{
+    background-color:#001F34 ;
+    color: #DBF2FF;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    padding:10px;
+    border:#001F34 ;
+}
