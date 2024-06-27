@@ -147,7 +147,7 @@ return: [{name,role,lastLogin},....]
 
 --------------------------------
 
-POST /api/admin/:companyId/users/:userId
+POST /api/admin/:companyId/users
 {email,role}
 (Add to company )
 
