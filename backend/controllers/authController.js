@@ -178,7 +178,6 @@ const logOutUser = async (req , res) => {
 const createCompany = async (req,res) => {
     try{
         const {
-            ownerId,
             ownerName,
             companyName,
             logo,
@@ -188,6 +187,8 @@ const createCompany = async (req,res) => {
             sizeOfEmployment,
             description
         } = req.body;
+
+        const  ownerId  = req.user._id
 
         const companyNameExist = await Company.findOne({companyName})
         

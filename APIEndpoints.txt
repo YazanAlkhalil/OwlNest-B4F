@@ -120,6 +120,10 @@ return: [{id,name,image},....]
 POST /api/admin/courses/:companyId
 body:{name,description}
 
+-------------------------------
+DELETE /api/admin/courses/:courseId
+remove course from company
+
 ------------users in course CRUD--------------------
 
 GET /api/admin/courses/:courseId/users
