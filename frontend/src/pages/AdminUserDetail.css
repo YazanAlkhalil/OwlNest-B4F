@@ -1,0 +1,8 @@
+.userDetail{
+    display: flex;
+    justify-content: space-between;
+}
+.NameUserDetail{
+    display: flex;
+    justify-content: space-between;
+}
