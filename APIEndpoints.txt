@@ -69,7 +69,7 @@ return: [{id,name,,image},....]
 
 GET /api/trainer/courses/:courseId
 return: {id,name,image,description,content:[
-{type:unit,id,name},
+{type:unit,id,title},
 {type:lesson,id,name,content:(video),description},
 {type:lesson,id,name,content:(pdf)},
 {type:lesson,id,name,content:(quiz),quiz:{name,grade,questions:[{name,grade,answers:[{name,isCorrect},....]},....]}},
@@ -87,21 +87,25 @@ DELETE /api/trainer/courses/:courseId/units/:unitId
 
 --------------------------------
 
-POST /api/trainer/courses/:courseId/units/:unitId/lessons
-FormData: {title,type(pdf,video),file,description(if type = video)}
+POST /api/trainer/courses/:courseId/units/:unitId/lessons/pdf
+FormData: {title,file}
+--------------------------------
+
+POST /api/trainer/courses/:courseId/units/:unitId/lessons/video
+FormData: {title,file,description}
 
 --------------------------------
 
-DELETE /api/trainer/courses/:courseId/units/:unitId/lessons/:lessonId
+POST /api/trainer/courses/:courseId/units/:unitId/lessons/quiz
+body: {title,quiz:{grade,questions:[{name,grade,answers:[{name,isCorrect},....]},....]}}
 
 --------------------------------
 
-POST /api/trainer/courses/:courseId/units/:unitId/quiz
-body: {name,grade,questions:[{name,grade,answers:[{name,isCorrect},....]},....]}
+DELETE /api/trainer/courses/:courseId/lessons/:lessonId
 
 --------------------------------
 
-PUT /api/trainer/courses/:courseId/units/:unitId/reorder
+PUT /api/trainer/courses/:courseId/reorder
 body:return: {id,name,image,description,content:[
 {type:unit,id,name},
 {type:lesson,id,name,content:(video),description},
