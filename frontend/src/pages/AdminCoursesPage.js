@@ -1,36 +1,39 @@
-import React from 'react'
-import TrainerCourse from '../components/TrainerCourse'
-import image from '../assets/images/multimedia-courses-scope-and-career 1.png'
-import image2 from '../assets/images/BA-Courses 1.png'
-import image3 from '../assets/images/c_7_free_google_courses_become_machine_learning_engineer_1 1.png'
-import image4 from '../assets/images/course__cs101_courses_datastructuresfromctopython__course-promo-image-1653540139 1.png'
-import FormDialog from '../components/admin/AddCourseDialog'
-
-
+import React, { useEffect, useState } from 'react';
+import TrainerCourse from '../components/TrainerCourse';
+import FormDialog from '../components/admin/AddCourseDialog';
+import toast from 'react-hot-toast';
 
 function AdminCoursesPage() {
+    const [courses, setCourses] = useState([]);
+
+    useEffect(() => {
+        const getCourses = async () => {
+            const res = await fetch(`http://localhost:5000/api/admin/courses/667c361ec4e922766a2b2a7c`, {
+                credentials : 'include'
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                toast.error(data.msg);
+            } else {
+                setCourses(data);
+            }
+        };
+
+        getCourses();
+    }, []);
+
     return (
         <div className='flex flex-col'>
-        <FormDialog/>
-        <div className='grid grid-cols-3 gap-y-10'>
-            <TrainerCourse image={image} name={'Multimedia'} />
-            <TrainerCourse image={image2} name={'Soft skills'} />
-            <TrainerCourse image={image3} name={'ML Google'} />
-            <TrainerCourse image={image4} name={'CS101'} />
-            <TrainerCourse image={image4} name={'CS101'} />
-            <TrainerCourse image={image4} name={'CS101'} />
-            <TrainerCourse image={image4} name={'CS101'} />
-            <TrainerCourse image={image4} name={'CS101'} />
-            <TrainerCourse image={image4} name={'CS101'} />
-            <TrainerCourse image={image4} name={'CS101'} />
-            <TrainerCourse image={image4} name={'CS101'} />
-            <TrainerCourse image={image4} name={'CS101'} />
-            <TrainerCourse image={image4} name={'CS101'} />
-            <TrainerCourse image={image4} name={'CS101'} />
-            <TrainerCourse image={image4} name={'CS101'} />
+            <FormDialog />
+            <div className='grid grid-cols-3 gap-y-10'>
+                {courses.map(course => (
+                    <TrainerCourse key={course._id} image={course.image} name={course.courseName} />
+                ))}
+            </div>
         </div>
-        </div>
-    )
+    );
 }
 
-export default AdminCoursesPage
+export default AdminCoursesPage;

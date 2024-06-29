@@ -3,15 +3,39 @@ import image from '../assets/images/—Pngtree—e-learning education online ill
 import './test.css'
 import Button from '../components/Button'
 import { InputAdornment, TextField } from '@mui/material'
-import { BiUser } from 'react-icons/bi'
-import { LuLock } from 'react-icons/lu'
+import { LuLock, LuMail } from 'react-icons/lu'
 import { useNavigate } from 'react-router-dom'
-
+import toast from 'react-hot-toast'
 
 function LoginPage() {
     const navigate = useNavigate()
-    const [username,setUsername] = useState('')
+    const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
+        const res = await fetch('http://localhost:5000/api/auth/login' , {
+            method : 'POST',
+            credentials: 'include',
+            headers : {
+                "Content-Type": "application/json"
+            },
+            body : JSON.stringify({
+                email,
+                password
+            })
+        })
+        const data = await res.json()
+        if(!res.ok){
+            toast.error(data.msg)
+        }
+        else{
+            localStorage.setItem('user', JSON.stringify(data));
+            navigate('/home')
+        }
+
+    }
 
 
     return (
@@ -26,13 +50,13 @@ function LoginPage() {
                         <TextField
                             className='w-full'
                             id="input-with-icon-textfield"
-                            onChange={e => setUsername(e.target.value)}
-                            value={username}
-                            placeholder='username'
+                            onChange={e => setEmail(e.target.value)}
+                            value={email}
+                            placeholder='email'
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <BiUser className='size-7'/>
+                                        <LuMail className='size-7'/>
                                     </InputAdornment>
                                 ),
                             }}
@@ -56,7 +80,7 @@ function LoginPage() {
                     />
                     <div className='my-8 w-full flex justify-center'>
 
-                    <Button  name='Login' onClick={() => { }} />
+                    <Button  name='Login' onClick={handleSubmit} />
                     </div>
                     <p className='font-bold text-left w-full hover:cursor-pointer pl-1  hover:text-hover'>Forgot password</p>
                     <div className='flex items-center w-4/5 my-8'>

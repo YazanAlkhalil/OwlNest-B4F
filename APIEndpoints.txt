@@ -170,3 +170,7 @@ DELETE /api/admin/:companyId/users/:userId
 (remove from company )
 
 
+
+
+GET /api/admin/company/:companyId/role
+return {role}
