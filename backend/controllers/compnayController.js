@@ -203,13 +203,13 @@ const getRole = async (req, res) => {
         const loggedInUser = req.user._id
         const company = await Company.findById(companyId).select("admins")
         const roles = []
-        const contracts = await Contract.findOne({companyId})
+        const contracts = await Contract.findOne({companyId , userId:loggedInUser})
 
         if(company.admins.includes(loggedInUser)){
             roles.push("admin")
         }
-        if(loggedInUser.toString() === contracts.userId.toString()){
-            roles.push(contracts.role)
+        if(contracts && contracts.role === "trainer"){
+            roles.push("trainer")
         }
 
         res.status(200).json(roles)

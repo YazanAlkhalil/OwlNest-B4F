@@ -121,6 +121,7 @@ const addUserToCourse = async (req, res) => {
         }
         const company = course.companyId
         const trainee = await Trainee.findOne({userId , courseId : course._id})
+        const contracts = await Contract.findOne({companyId : company._id , userId})
 
         if(company.ownerId.toString() !== loggedInUserId.toString() && !company.admins.find(admin => admin.toString() === loggedInUserId.toString())){
             return res.status(401).json({message: 'Unauthorized'})
@@ -128,12 +129,15 @@ const addUserToCourse = async (req, res) => {
         if(trainee){
             return res.status(400).json({msg : "User Already Exists in course"})
         }
-
+        
         if (role === 'trainer') {
-            course.trainers.push(user._id);
-            await course.save();
+            if(company.ownerId.toString() === userId.toString() || company.admins.find(admin => admin.toString() === userId.toString()) || contracts.role === "trainer"){
+                course.trainers.push(user._id);
+                await course.save();
+            }else {
+                return res.status(400).json({msg: "User can't add to trainers"})
+            }
         }
-
         const newTrainee = new Trainee({
             courseId,
             userId
