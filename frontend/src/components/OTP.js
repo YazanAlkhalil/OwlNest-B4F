@@ -158,9 +158,12 @@ OTP.propTypes = {
     value: PropTypes.string.isRequired,
 };
 
-export default function OTPInput() {
-    const [otp, setOtp] = React.useState('');
-
+export default function OTPInput({
+    separator,
+    value,
+    onChange,
+    length
+}) {
     return (
         <Box
             sx={{
@@ -169,7 +172,7 @@ export default function OTPInput() {
                 gap: 2,
             }}
         >
-            <OTP separator={<span>-</span>} value={otp} onChange={setOtp} length={4} />
+            <OTP separator={separator} value={value} onChange={onChange} length={length} />
         </Box>
     );
 }
