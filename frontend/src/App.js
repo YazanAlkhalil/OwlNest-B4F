@@ -16,6 +16,7 @@ import RegisterPage from './pages/RegisterPage';
 import CreateCompanyPage from './pages/CreateCompanyPage';
 import RegisterCompanyPage from './pages/RegisterCompanyPage';
 import VerificationPage from './pages/VerificationPage';
+import AdminUserDetail from './pages/AdminUserDetail';
 import CompanyPage from './pages/CompanyPage';
 import TranieeDashboard from './pages/TranieeDashboard'
 import TraineeCourses from './pages/TraineeCourses'
@@ -70,15 +71,16 @@ function App() {
             <Route path="/trainer" element={<Navigate to="/trainer/courses" replace />} />
           </Route>
 
-          {/* //admin routes */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route path='/admin/dashboard' element={<AdminDashboard />} />
-            <Route path='/admin/courses/:id' element={<AdminCourseDetails />} />
-            <Route path='/admin/courses' element={<AdminCoursesPage />} />
-            <Route path='/admin/users' element={<AdminUsers />} />
-            <Route path='/admin/users/:id' element={<AdminCoursesPage />} />
-            <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
-          </Route>
+        {/* //admin routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path='/admin/dashboard' element={<AdminDashboard />}/>
+          <Route path='/admin/courses/:id' element={<AdminCourseDetails />}/>
+          <Route path='/admin/courses' element={<AdminCoursesPage />}/>
+          <Route path='/admin/users' element={<AdminUsers />}/>
+          <Route path='/admin/users/:id' element={<AdminCoursesPage />}/>
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="/admin/user-details" element={<AdminUserDetail/>} />
+        </Route>
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

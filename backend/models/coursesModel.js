@@ -9,7 +9,7 @@ const courseSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    descreption : {
+    description : {
         type : String,
         required : true
     },
@@ -26,9 +26,9 @@ const courseSchema = mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref: "Users"
     },
-    content : {
+    content : [{
         type : Object
-    }
+    }]
 })
 
 const Course = mongoose.model('Course',courseSchema);

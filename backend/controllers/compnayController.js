@@ -5,6 +5,7 @@ const addUserToCompnay = async (req,res) => {
     try {
         const { email , role } = req.body
         const { companyId  } = req.params
+        const loggedInUserId = req.user._id
 
         const company = await Company.findById(companyId)
         const user = await Users.findOne({email})
@@ -14,6 +15,9 @@ const addUserToCompnay = async (req,res) => {
         
         if(!user){
             return res.status(404).json({msg : 'User not found'})
+        }
+        if(company.ownerId.toString() !== loggedInUserId.toString() && !company.admins.find(admin => admin.toString() === loggedInUserId.toString())){
+            return res.status(401).json({message: 'Unauthorized'})
         }
 
         const contract = await Contract.findOne({companyId,userId:user._id})
@@ -48,14 +52,21 @@ const addUserToCompnay = async (req,res) => {
 const getUsersFromCompany = async (req, res) => {
     try {
         const { companyId } = req.params;
-
+        const loggedInUserId = req.user._id
         const contracts = await Contract.find({ companyId }).populate('userId');
         const company = await Company.findById(companyId).populate('admins', 'username');
 
+        
         if (!company) {
             return res.status(404).json({ message: 'Company not found' });
         }
+        
+        if(company.ownerId.toString() !== loggedInUserId.toString() && !company.admins.find(admin => admin._id.toString() === loggedInUserId.toString())){
+            return res.status(401).json({message: 'Unauthorized'})
+        }
 
+
+        
         const adminUsernames = company.admins.map(admin => ({
             name : admin.username,
             role : "admin"
@@ -77,16 +88,28 @@ const updateUserRole = async (req, res) => {
     try {
         const { companyId, userId } = req.params;
         const { role } = req.body;
+        const loggedInUser = req.user._id
+        let loggedInUserRole;
 
+        
         const company = await Company.findById(companyId);
         const user = await Users.findById(userId);
-
         if (!company) {
             return res.status(404).json({ msg: 'Company not found' });
         }
-
+        
         if (!user) {
             return res.status(404).json({ msg: 'User not found' });
+        }
+        const admin = company.admins.find(adminId => adminId.toString() === loggedInUser.toString())
+
+        if(company.ownerId.toString() == loggedInUser.toString()) {
+            loggedInUserRole = "owner"
+        }
+        else if(admin && role !== "admin"){
+            loggedInUserRole = "admin"
+        }else {
+            return res.status(401).json({ msg : "UnAuthorized" })
         }
 
         if (role === 'admin') {
@@ -94,9 +117,10 @@ const updateUserRole = async (req, res) => {
                 company.admins.push(userId);
                 await company.save();
             }            
-            await Contract.deleteMany({ companyId, userId });
+            await Contract.deleteOne({ companyId, userId });
 
             return res.status(200).json({ message: 'User role updated to admin successfully' });
+            
         } else if (role === 'trainer' || role === 'trainee') {
             company.admins = company.admins.filter(adminId => adminId.toString() !== userId);
             await company.save();
@@ -126,14 +150,11 @@ const updateUserRole = async (req, res) => {
 const removeUserFromCompany = async (req, res) => {
     try {
         const { companyId, userId } = req.params;
+        const loggedInUser = req.user._id
+        let loggedInUserRole = ""
 
         const company = await Company.findById(companyId);
         const user = await Users.findById(userId);
-        const contract = await Contract.findOne({companyId , userId})
-
-        if(!contract){
-            return res.status(404).json({ msg: 'User not found'});
-        }
 
         if (!company) {
             return res.status(404).json({ msg: 'Company not found' });
@@ -143,12 +164,34 @@ const removeUserFromCompany = async (req, res) => {
             return res.status(404).json({ msg: 'User not found' });
         }
 
-        company.admins = company.admins.filter(adminId => adminId.toString() !== userId);
-        await company.save();
+        const admin = company.admins.find(adminId => adminId.toString() === loggedInUser.toString())
 
-        await Contract.deleteMany({ companyId, userId });
+        if(company.ownerId.toString() === loggedInUser.toString()){
+            loggedInUserRole = "owner"
+        }
+        else if(admin ){
+            loggedInUserRole = "admin"
+        }else {
+            return res.status(401).json({ msg : "UnAuthorized" })
+        }
+        const removedAdmin = company.admins.find(admin => admin.toString() === user._id.toString())
+        if(company.ownerId.toString() === user._id.toString()){
+            return res.status(400).json({ msg:"Can't delete owner"})
+        }
+        else if(loggedInUserRole === 'admin' && removedAdmin)
+        {
+            return res.status(401).json({ msg : "UnAuthorized" })
 
+        }
+        else if(!removedAdmin){
+            await Contract.deleteOne({ companyId, userId });
+        }
+        else{
+            company.admins = company.admins.filter(admin => admin.toString() === user._id.toString())
+            await company.save()
+        }
         res.status(200).json({ message: 'User removed from company successfully' });
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

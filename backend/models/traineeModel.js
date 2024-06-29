@@ -7,11 +7,10 @@ const traineeSchema = mongoose.Schema({
     },
     userId : {
         type : mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "Users"
     },
     grade : {
-        type : Number,
-        required : true
+        type : Number
     },
     completionProgress : {
         type : Object
