@@ -1,8 +1,8 @@
+require('dotenv').config()
 const express = require('express')
 const cookieParser = require("cookie-parser");
-require('dotenv').config()
 const connectedDB = require('./db/connectionDB')
-// const cors = require('cors')
+const cors = require('cors')
 const app = express()
 const auth = require('./routers/authRouter')
 const course = require('./routers/courseRouter')
@@ -13,7 +13,10 @@ const trainee = require('./routers/traineeRouter')
 
 app.use(express.json())
 app.use(cookieParser())
-// app.use(cors())
+app.use(cors({
+    origin : "http://localhost:3000",
+    credentials : true
+}))
 
 app.use("/api/auth" , auth)
 app.use('/api/admin',protectRoute.protectRoute , course)

@@ -16,12 +16,12 @@ const signUpUser = async (req , res) => {
     try{
         const {username,email,password,confirmPassword,phoneNumber,birthDate,gender,country,city} = req.body;
         if (password !== confirmPassword) {
-			return res.status(400).json({ error: "Passwords don't match" });
+			return res.status(400).json({ msg: "Passwords don't match" });
 		}
         const emailUser = await User.findOne({email})
         
         if(emailUser) {
-            return res.status(400).json("User already exists")
+            return res.status(400).json({msg : "User already exists"})
         }
         const hashPassword = await bcryptjs.hash(password,10)
         
@@ -65,9 +65,9 @@ const signUpUser = async (req , res) => {
 
         if(newUser){
             await newUser.save();
-            res.status(201).json({message : "verify your email"})
+            res.status(201).json({msg : "verify your email" , email})
         }else { 
-            res.status(400).json({message : "Invalid user data"})
+            res.status(400).json({msg : "Invalid user data"})
         }
     }
     catch(err){
@@ -81,13 +81,13 @@ const loginUser = async (req , res) => {
         const user = await User.findOne({email})
 
         if(!user){
-            return res.status(404).json({message: "User not found"})
+            return res.status(404).json({msg: "User not found"})
         }
 
         const isPasswordCorrect = await bcryptjs.compare(password, user.password || "")
         
         if(!isPasswordCorrect){
-            return res.status(404).json({message : "Invalid email or password"})
+            return res.status(404).json({msg : "Invalid email or password"})
         }
 
         const isVerified = user.isVerified
@@ -103,7 +103,7 @@ const loginUser = async (req , res) => {
         })
     }
     catch(err){
-        res.status(500).json({message: "Error in server"});
+        res.status(500).json({msg: "Error in server"});
     }
 }
 
@@ -113,12 +113,12 @@ const verifyEmail = async (req,res) => {
 
         const user = await User.findOne({
             email,
-            otp: otp,
+            otp : otp,
             verificationCodeExpires: { $gt: Date.now()}
         });
-
+        
         if(!user){
-            return res.status(404).json({message: "'Invalid or expired OTP"})
+            return res.status(404).json({msg: "'Invalid or expired OTP"})
         }
 
         user.isVerified = true
@@ -132,7 +132,7 @@ const verifyEmail = async (req,res) => {
         })
 
     } catch (error) {
-        res.status(500).json({message: error.message})
+        res.status(500).json({msg: error.message})
     }
 }
 
@@ -141,7 +141,7 @@ const resendOtp = async (req,res) => {
         const {email} = req.body
         const user = await User.findOne({email})
         if(!user){
-            res.status(404).json({message : "User not found"})
+            return res.status(404).json({msg : "User not found"})
         }
 
         const otp1 = Math.floor(Math.random()*10)
@@ -152,14 +152,29 @@ const resendOtp = async (req,res) => {
         user.otp = `${otp1}${otp2}${otp3}${otp4}`
         user.verificationCodeExpires = new Date(Date.now() + 10 * 60 * 1000)
 
+        
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Your OTP Code',
+            text: `Your OTP Code is ${user.otp}`,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('Error sending email: ' + error.message);
+            }else {
+                console.log("Send Otp Successfully");
+            }
+        });
         await user.save()
 
         res.status(200).json({
-            message : "reset successfully"
+            msg : "resend successfully"
         })
 
     } catch (error) {
-        res.status(500).json({message: error.message})
+        res.status(500).json({msg: error.message})
     }
 }
 
@@ -167,10 +182,10 @@ const resendOtp = async (req,res) => {
 const logOutUser = async (req , res) => {
     try{
         res.cookie("jwt","",{maxAge:0})
-        res.status(200).json({message : "User logged out"})
+        res.status(200).json({msg : "User logged out"})
     }
     catch(err){
-        res.status(500).json({message: "Error in server"});
+        res.status(500).json({msg: "Error in server"});
     }
 }
 
@@ -194,7 +209,7 @@ const createCompany = async (req,res) => {
         
         
         if(companyNameExist){
-            return res.status(400).json({message: 'Company already exists'})
+            return res.status(400).json({msg: 'Company already exists'})
         }
         
         const newCompany = new Company({
@@ -211,13 +226,13 @@ const createCompany = async (req,res) => {
         
         if(newCompany){
             await newCompany.save()
-            res.status(201).json({message: 'Company created successfully'})
+            res.status(201).json({msg: 'Company created successfully'})
         }else{
-            res.status(400).json({message: 'Invalid company'})
+            res.status(400).json({msg: 'Invalid company'})
         }
     }
     catch(err) {
-        res.status(500).json({message: err.message})
+        res.status(500).json({msg: err.message})
     }
 }
 

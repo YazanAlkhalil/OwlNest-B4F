@@ -16,12 +16,52 @@ import Select from '@mui/material/Select';
 import './test.css'
 import { countries } from '../assets/js/countries'
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
+import dayjs from 'dayjs'
 
 
 function RegisterPage() {
     const navigate = useNavigate()
     const [fistPage, setFistPage] = useState(false)
-    const [value, setValue] = React.useState(null);
+    const [value, setValue] = useState(null);
+    const [username,setUsername] = useState('')
+    const [email,setEmail] = useState('')
+    const [password,setPassword] = useState('')
+    const [confirmPassword,setConfirmPassword] = useState('')
+    const [phoneNumber,setPhoneNumber] = useState('')
+    const [birthDate,setBirthDate] = useState(dayjs('2022-3-13'))
+    const [gender,setGender] = useState('')
+    const [country,setCountry] = useState('')
+    const [city,setCity] = useState('')
+
+
+    const handleSubmit = async () => {
+
+        const res = await fetch('http://localhost:5000/api/auth/register/user',{
+            method : 'POST',
+            headers : {
+                "Content-Type" : "application/json"
+            },
+            body : JSON.stringify({
+                username,
+                password,
+                confirmPassword,
+                email,
+                phoneNumber,
+                birthDate,
+                gender,
+                city,
+                country
+            })
+        })
+        const data = await res.json()
+        if(!res.ok){
+            toast.error(data.msg)
+        }else {
+            localStorage.setItem('USER_EMAIL',data.email)
+            navigate('/verify')
+        }
+    }
 
     return (
         <div className='grid grid-cols-2'>
@@ -35,8 +75,8 @@ function RegisterPage() {
                                     <TextField
                                         className='w-full'
                                         id="input-with-icon-textfield"
-                                        // onChange={e => setUsername(e.target.value)}
-                                        // value={username}
+                                        onChange={e => setUsername(e.target.value)}
+                                        value={username}
                                         placeholder='username'
                                         InputProps={{
                                             startAdornment: (
@@ -50,8 +90,8 @@ function RegisterPage() {
                                     <TextField
                                         className='w-full'
                                         id="input-with-icon-textfield"
-                                        // onChange={e => setUsername(e.target.value)}
-                                        // value={username}
+                                        onChange={e => setEmail(e.target.value)}
+                                        value={email}
                                         placeholder='email'
                                         InputProps={{
                                             startAdornment: (
@@ -66,8 +106,8 @@ function RegisterPage() {
                                         className='w-full'
                                         id="input-with-icon-textfield"
                                         placeholder='password'
-                                        // onChange={e => setPassword(e.target.value)}
-                                        // value={password}
+                                        onChange={e => setPassword(e.target.value)}
+                                        value={password}
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">
@@ -81,8 +121,8 @@ function RegisterPage() {
                                         className='w-full'
                                         id="input-with-icon-textfield"
                                         placeholder='confirm password'
-                                        // onChange={e => setPassword(e.target.value)}
-                                        // value={password}
+                                        onChange={e => setConfirmPassword(e.target.value)}
+                                        value={confirmPassword}
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">
@@ -109,8 +149,8 @@ function RegisterPage() {
                                     <TextField
                                         className='w-full'
                                         id="input-with-icon-textfield"
-                                        // onChange={e => setUsername(e.target.value)}
-                                        // value={username}
+                                        onChange={e => setPhoneNumber(e.target.value)}
+                                        value={phoneNumber}
                                         placeholder='phone number'
                                         InputProps={{
                                             startAdornment: (
@@ -128,8 +168,8 @@ function RegisterPage() {
                                             <Select
                                                 labelId="demo-simple-select-standard-label"
                                                 id="demo-simple-select-standard"
-                                                // value={age}
-                                                // onChange={handleChange}
+                                                value={gender}
+                                                onChange={(e) => setGender(e.target.value)}
                                                 className='mt-0'
                                             >
                                                 
@@ -144,8 +184,8 @@ function RegisterPage() {
                                         <Select
                                             labelId="demo-simple-select-standard-label"
                                             id="demo-simple-select-standard"
-                                            // value={age}
-                                            // onChange={handleChange}
+                                            value={country}
+                                            onChange={(e) => setCountry(e.target.value)}
                                             className='mt-0'
                                         >
                                             
@@ -161,15 +201,15 @@ function RegisterPage() {
                                         className='w-full'
                                         id="input-with-icon-textfield"
                                         placeholder='City'
-                                        // onChange={e => setPassword(e.target.value)}
-                                        // value={password}
-                                        // InputProps={{
-                                        //     startAdornment: (
-                                        //         <InputAdornment position="start">
-                                        //             <LuLock className='size-7' />
-                                        //         </InputAdornment>
-                                        //     ),
-                                        // }}
+                                        onChange={e => setCity(e.target.value)}
+                                        value={city}
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <LuLock className='size-7' />
+                                                </InputAdornment>
+                                            ),
+                                        }}
                                         variant="standard"
                                     />
                                     
@@ -177,12 +217,12 @@ function RegisterPage() {
                                     <LocalizationProvider   dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             label="Birth date"
-                                            value={value}
-                                            onChange={(newValue) => setValue(newValue)}
+                                            value={birthDate}
+                                            onChange={(e) => setBirthDate(e)}
                                         />
                                     </LocalizationProvider>
                                 </div>
-                                <Button name='Register' onClick={() => { }} />
+                                <Button name='Register' onClick={() => handleSubmit()} />
                                 <div className='flex-grow h-10 bg-primary rounded'></div>
                                 <div onClick={() => { setFistPage(false) }} className='hover:text-hover hover:cursor-pointer flex justify-start w-full items-center gap-2'>
                                     <MdArrowBack className=''/>

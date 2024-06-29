@@ -8,7 +8,6 @@ const TraineeLayout = () => {
       <Sidebar  links={[
         { name: "homepage", url: "/trainee/homepage" },
         { name: "courses", url: "/trainee/courses" },
-        { name: "favorites", url: "/trainee/favorites" },
         { name: "certifications", url: "/trainee/certifications" },
       ]} />
       <div className="h-screen col-span-5 flex flex-col grow-[24]">

@@ -197,10 +197,33 @@ const removeUserFromCompany = async (req, res) => {
     }
 };
 
+const getRole = async (req, res) => {
+    try {
+        const { companyId } = req.params
+        const loggedInUser = req.user._id
+        const company = await Company.findById(companyId).select("admins")
+        const roles = []
+        const contracts = await Contract.findOne({companyId , userId:loggedInUser})
+
+        if(company.admins.includes(loggedInUser)){
+            roles.push("admin")
+        }
+        if(contracts && contracts.role === "trainer"){
+            roles.push("trainer")
+        }
+
+        res.status(200).json(roles)
+        
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 
 module.exports = {
     addUserToCompnay,
     getUsersFromCompany,
     updateUserRole,
-    removeUserFromCompany
+    removeUserFromCompany,
+    getRole
 }
