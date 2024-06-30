@@ -219,11 +219,34 @@ const getRole = async (req, res) => {
     }
 }
 
+const getCompanies = async (req, res) => {
+    try {
+        const loggedInUserId = req.user._id
+        const logos = new Set()
+        let company = await Company.find()
+        let contracts = await Contract.find({userId : loggedInUserId}).populate('companyId')
+        if(company){
+            company = company.filter(company => company.admins.find(id => id.toString() === loggedInUserId.toString()) || company.ownerId.toString() === loggedInUserId.toString()).map(company => company.logo)
+            if(company.length > 0)
+            logos.add(...company)
+        }
+        if(contracts){
+            contracts = contracts.map(contract => contract.companyId.logo)
+            if(contracts.length > 0){
+            logos.add(...contracts)
+        }}
+        res.status(200).json([...logos])
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 
 module.exports = {
     addUserToCompnay,
     getUsersFromCompany,
     updateUserRole,
     removeUserFromCompany,
-    getRole
+    getRole,
+    getCompanies
 }

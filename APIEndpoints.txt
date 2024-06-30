@@ -176,3 +176,5 @@ return {role}
 
 
 --------------------------------
+
+GET /api/admin/companies
