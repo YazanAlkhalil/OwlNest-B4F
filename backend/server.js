@@ -11,7 +11,7 @@ const protectRoute = require('./middlewares/protectRoute');
 const trainer = require('./routers/trainerRouter')
 const trainee = require('./routers/traineeRouter')
 
-app.use(express.json())
+app.use(express.json({ limit: '50mb' }))
 app.use(cookieParser())
 app.use(cors({
     origin : "http://localhost:3000",

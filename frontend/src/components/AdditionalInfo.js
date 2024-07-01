@@ -28,7 +28,7 @@ function AdditionalInfo({close}) {
       rows="4"
       placeholder="Add additional resources..."
       style={{ resize: 'none' }}
-    />
+      />
     </div>
   )
 }

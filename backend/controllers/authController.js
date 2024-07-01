@@ -226,7 +226,7 @@ const createCompany = async (req,res) => {
         
         if(newCompany){
             await newCompany.save()
-            res.status(201).json({msg: 'Company created successfully'})
+            res.status(201).json({msg: 'Company created successfully',id:newCompany._id})
         }else{
             res.status(400).json({msg: 'Invalid company'})
         }

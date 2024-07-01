@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "@ramonak/react-progress-bar": "^5.2.0"
+    "@google/generative-ai": "^0.14.0",
+    "@ramonak/react-progress-bar": "^5.2.0",
+    "@reduxjs/toolkit": "^2.2.6",
+    "react-redux": "^9.1.2"
   }
 }

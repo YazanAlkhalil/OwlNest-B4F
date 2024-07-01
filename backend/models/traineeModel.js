@@ -9,14 +9,24 @@ const traineeSchema = mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref: "Users"
     },
-    grade : {
-        type : Number
-    },
-    completionProgress : {
-        type : Object
-    },
+    grade : [{
+        _id: mongoose.Schema.Types.ObjectId,
+        grade: Number,
+        Date: {
+            type:Date,
+            default: Date.now
+        }
+    }],
+    completionProgress : [
+        {
+            type: String
+        }
+    ],
     completionDate : {
         type : Date
+    },
+    XP : {
+        type : Number
     }
 })
 

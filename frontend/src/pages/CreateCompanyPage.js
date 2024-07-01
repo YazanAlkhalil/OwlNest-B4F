@@ -18,7 +18,7 @@ function CreateCompanyPage() {
                     <img src={logo} className='w-20'/>
                     <div className='flex w-full justify-evenly my-6'>
                         <button onClick={()=>{navigate('/registerCompany')}} className='p-2 rounded bg-accent hover:bg-[#dea11ecd] text-white'>Create your nest now</button>
-                        <button className='p-2 rounded bg-secondary hover:bg-[#3f6188d0] text-white'>maybe later</button>
+                        <button onClick={()=>{navigate('/company')}} className='p-2 rounded bg-secondary hover:bg-[#3f6188d0] text-white'>maybe later</button>
                     </div>
                 </div>
             </div>

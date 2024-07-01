@@ -4,14 +4,6 @@ const Course = require('../models/coursesModel')
 const crypto = require('crypto')
 const mongoose = require('mongoose');
 
-const getCompanies = async (req , res) => {
-    try{
-        let companies = await Company.find().select("_id companyName logo")
-        return res.status(200).json(companies);
-    } catch (error) {
-        res.status(500).json({msg : error.message})
-    }
-}
 
 const getCompanyCources = async (req, res) => {
     const companyId = new mongoose.Types.ObjectId(req.params.companyId);
@@ -25,9 +17,10 @@ const getCompanyCources = async (req, res) => {
       }
   
       const result = await Promise.all(courses.map(async (course) => {
-        const completionProgressDoc = await Trainees.findOne({ courseId: course._id, userId: loggedInUserId }).select("completionProgress");
+        const completionProgressDoc = await Trainees.find({ courseId: course._id, userId: loggedInUserId }).select("completionProgress");
         const completionProgress = completionProgressDoc ? completionProgressDoc.completionProgress : 0;
         return {
+            id: course._id,
           courseName: course.courseName,
           image: course.image,
           completionProgress,
@@ -72,20 +65,65 @@ const getlesson = async (req,res) => {
         return res.status(404).json({ message: "Lesson not found" });
         }
 
-        const { grade, questions } = lesson;
-        const answers = questions.flatMap((question) => question.answers);
+        const { name ,grade, questions } = lesson;
 
-        return res.status(200).json({ courseName: course.courseName, grade, answers });
+        return res.status(200).json({ courseName: course.courseName, name, grade, questions });
     } catch (error){
         res.status(500).json({msg : error.message})
     }
 }
 
 const getQuizSolution = async (req,res) => {
-    getlesson(req,res)
+    try{
+      let {questions} = getlesson(req,res);
+      const {traineeAnswer}= req.body
+      const loggedInUserId = req.user._id;
+  
+      let grade = []
+      let result = []
+  
+      for(let i = 0; i<traineeAnswer.length; i++){
+        let answers = questions[i].answers
+        answers = answers.map(a=> a.isCorrect)
+        let TAnaswer = traineeAnswer[i].map(a=> a.isCorrect)
+
+        if(JSON.stringify(TAnaswer)==JSON.stringify(answers)){
+          grade.push(questions[i].grade);
+        }
+        result.push({
+          id:traineeAnswer[i],
+          grade:grade[i]
+        })
+      }
+  
+      let totalgrade = 0
+      totalgrade = grade.map(g => {
+      totalgrade = totalgrade + g.grade
+      })
+      let updateGrade = await Trainees.findOne({userId:loggedInUserId,courseId:req.params.courseId})
+      updateGrade.grade.push({
+        _id: req.params.lessonId,
+        grade: totalgrade
+      })
+      await updateGrade.save()
+
+      let updateXP = await Trainees.findOne({userId:loggedInUserId,courseId:req.params.courseId})
+      updateXP.XP += (10*totalgrade)
+      await updateXP.save()
+
+      
+      let updateCompletionProgress = await Trainees.findOne({userId:loggedInUserId,courseId:req.params.courseId})
+      updateCompletionProgress.completionProgress.push(req.params.lessonId)
+      await updateCompletionProgress.save()
+
+
+      res.status(200).send({result,totalgrade})
+    } catch (error){
+      res.status(500).send({Msg: error.message})
+    } 
 }
+
 module.exports = {
-getCompanies,
 getCompanyCources,
 getcourseinfo,
 getlesson,

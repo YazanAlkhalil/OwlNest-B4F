@@ -11,7 +11,8 @@ const getCourses = async (req, res) => {
         let loggedInUserRole;
 
         const company = await Company.findById(companyId)
-
+        if(!company)
+            throw Error(`Couldn't find company`)
         if(company.ownerId.toString() === loggedInUserId.toString()) {
             loggedInUserRole === "owner"
         }else if(company.admins.find(adminId => adminId.toString() === loggedInUserId.toString())){
