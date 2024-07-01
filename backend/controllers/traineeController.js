@@ -78,7 +78,6 @@ const getQuizSolution = async (req,res) => {
     getlesson(req,res)
 }
 module.exports = {
-getCompanies,
 getCompanyCources,
 getcourseinfo,
 getlesson,

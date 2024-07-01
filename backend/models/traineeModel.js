@@ -12,7 +12,10 @@ const traineeSchema = mongoose.Schema({
     grade : [{
         _id: mongoose.Schema.Types.ObjectId,
         grade: Number,
-        Date: new Date(Date.now())
+        Date: {
+            type:Date,
+            default: Date.now
+        }
     }],
     completionProgress : [
         {
