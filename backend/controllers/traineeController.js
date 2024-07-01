@@ -106,7 +106,17 @@ const getQuizSolution = async (req,res) => {
         grade: totalgrade
       })
       await updateGrade.save()
+
+      let updateXP = await Trainees.findOne({userId:loggedInUserId,courseId:req.params.courseId})
+      updateXP.XP += (10*totalgrade)
+      await updateXP.save()
+
       
+      let updateCompletionProgress = await Trainees.findOne({userId:loggedInUserId,courseId:req.params.courseId})
+      updateCompletionProgress.completionProgress.push(req.params.lessonId)
+      await updateCompletionProgress.save()
+
+
       res.status(200).send({result,totalgrade})
     } catch (error){
       res.status(500).send({Msg: error.message})
