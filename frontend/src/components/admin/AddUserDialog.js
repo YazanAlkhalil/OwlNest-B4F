@@ -38,7 +38,6 @@ export default function FormDialog({ onUserAdded }) {
     async function handleSubmit() {
         try {
             const companyId = localStorage.getItem('companyId')
-            console.log(companyId);
             const res = await fetch(`http://localhost:5000/api/admin/${companyId}/users`, {
                 method: 'POST',
                 credentials : 'include',
@@ -59,7 +58,7 @@ export default function FormDialog({ onUserAdded }) {
                 reset();
             }
         } catch (error) {
-            toast.error('An error occurred while adding the user.');
+            console.log(error.message);
         }
     }
 
