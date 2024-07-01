@@ -66,7 +66,7 @@ function VerificationPage() {
         if(!res.ok){
             toast.error(data.msg)
         }else {
-            navigate('/home')
+            navigate('/create')
         }
     }
 

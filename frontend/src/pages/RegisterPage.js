@@ -29,7 +29,7 @@ function RegisterPage() {
     const [password,setPassword] = useState('')
     const [confirmPassword,setConfirmPassword] = useState('')
     const [phoneNumber,setPhoneNumber] = useState('')
-    const [birthDate,setBirthDate] = useState(dayjs('2022-3-13'))
+    const [birthDate,setBirthDate] = useState(null)
     const [gender,setGender] = useState('')
     const [country,setCountry] = useState('')
     const [city,setCity] = useState('')
@@ -203,13 +203,7 @@ function RegisterPage() {
                                         placeholder='City'
                                         onChange={e => setCity(e.target.value)}
                                         value={city}
-                                        InputProps={{
-                                            startAdornment: (
-                                                <InputAdornment position="start">
-                                                    <LuLock className='size-7' />
-                                                </InputAdornment>
-                                            ),
-                                        }}
+                                        
                                         variant="standard"
                                     />
                                     

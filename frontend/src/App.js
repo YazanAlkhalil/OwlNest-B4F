@@ -27,6 +27,8 @@ import TraineeProgress from './components/TraineeProgress'
 import TraineeLesson from './components/TraineeLesson'
 import TraineeDiscussion from './components/TraineeDiscussion'
 import TraineeInfor from './components/TraineeInfor'
+import { Provider } from 'react-redux';
+import { store } from './RTK/store';
 
 
 function App() {
