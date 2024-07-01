@@ -17,22 +17,22 @@ const addUserToCompnay = async (req,res) => {
             return res.status(404).json({msg : 'User not found'})
         }
         if(company.ownerId.toString() !== loggedInUserId.toString() && !company.admins.find(admin => admin.toString() === loggedInUserId.toString())){
-            return res.status(401).json({message: 'Unauthorized'})
+            return res.status(401).json({msg: 'Unauthorized'})
         }
 
         const contract = await Contract.findOne({companyId,userId:user._id})
         if(contract){
-            return res.status(400).json({ message: 'User is already in this company'});
+            return res.status(400).json({ msg: 'User is already in this company'});
         }
         
         if (company.admins.includes(user._id)) {
-            return res.status(400).json({ message: 'User is already an admin of this company'});
+            return res.status(400).json({ msg: 'User is already an admin of this company'});
         }
 
         if(role == "admin"){
             company.admins.push(user._id);
             await company.save()
-            return res.status(200).json({ message : "Add to company successfully"})
+            return res.status(200).json({ msg: "Add to company successfully"})
         }
         const newContract = new Contract({
             companyId,
@@ -41,11 +41,11 @@ const addUserToCompnay = async (req,res) => {
             joinDate : new Date()
         })
         await newContract.save();
-        res.status(200).json({ message : "Add to contract successfully"})
+        res.status(200).json({ msg: "Add to contract successfully"})
         
 
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({msg: error.message});
     }
 }
 
@@ -58,11 +58,11 @@ const getUsersFromCompany = async (req, res) => {
 
         
         if (!company) {
-            return res.status(404).json({ message: 'Company not found' });
+            return res.status(404).json({ msg: 'Company not found' });
         }
         
         if(company.ownerId.toString() !== loggedInUserId.toString() && !company.admins.find(admin => admin._id.toString() === loggedInUserId.toString())){
-            return res.status(401).json({message: 'Unauthorized'})
+            return res.status(401).json({msg: 'Unauthorized'})
         }
 
 
@@ -80,7 +80,7 @@ const getUsersFromCompany = async (req, res) => {
         res.status(200).json([...users, ...adminUsernames]);
 
     }  catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({msg: error.message});
     }
 }
 
@@ -119,7 +119,7 @@ const updateUserRole = async (req, res) => {
             }            
             await Contract.deleteOne({ companyId, userId });
 
-            return res.status(200).json({ message: 'User role updated to admin successfully' });
+            return res.status(200).json({ msg: 'User role updated to admin successfully' });
             
         } else if (role === 'trainer' || role === 'trainee') {
             company.admins = company.admins.filter(adminId => adminId.toString() !== userId);
@@ -138,12 +138,12 @@ const updateUserRole = async (req, res) => {
                 });
                 await contract.save();
             }
-            return res.status(200).json({ message: `User role updated to ${role} successfully` });
+            return res.status(200).json({ msg: `User role updated to ${role} successfully` });
         } else {
-            return res.status(400).json({ message: 'Invalid role specified' });
+            return res.status(400).json({ msg: 'Invalid role specified' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ msg: error.message });
     }
 };
 
@@ -190,10 +190,10 @@ const removeUserFromCompany = async (req, res) => {
             company.admins = company.admins.filter(admin => admin.toString() === user._id.toString())
             await company.save()
         }
-        res.status(200).json({ message: 'User removed from company successfully' });
+        res.status(200).json({ msg: 'User removed from company successfully' });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ msg: error.message });
     }
 };
 
@@ -215,7 +215,7 @@ const getRole = async (req, res) => {
         res.status(200).json(roles)
         
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ msg: error.message });
     }
 }
 
@@ -237,7 +237,7 @@ const getCompanies = async (req, res) => {
         }}
         res.status(200).json([...logos])
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ msg: error.message });
     }
 }
 
