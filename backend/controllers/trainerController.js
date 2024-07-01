@@ -76,6 +76,7 @@ const addPdf = async (req , res) => {
         for (let index = course.content.length -1 ; index >= 0; index--) {
             if(course.content[index].type === 'Unit')
                 if(course.content[index]._id === unitId){
+                    course.lessonCount += 1
                     course.content.push({
                         type:'pdf',
                         _id,
@@ -94,6 +95,7 @@ const addPdf = async (req , res) => {
                     foundUnit = true
                 if(foundUnit){
                     if(obj.type === "Unit" && obj._id !== unitId){
+                        course.lessonCount += 1
                         newContent.push({
                             type:'pdf',
                             _id,
@@ -132,6 +134,8 @@ const addVideo = async (req , res) => {
         for (let index = course.content.length -1 ; index >= 0; index--) {
             if(course.content[index].type === 'Unit')
                 if(course.content[index]._id === unitId){
+                    course.lessonCount += 1
+
                     course.content.push({
                         type:'video',
                         _id,
@@ -151,6 +155,8 @@ const addVideo = async (req , res) => {
                     foundUnit = true
                 if(foundUnit){
                     if(obj.type === "Unit" && obj._id !== unitId){
+                        course.lessonCount += 1
+
                         newContent.push({
                             type:'video',
                             _id,
@@ -189,6 +195,8 @@ const addQuiz = async (req , res) => {
         for (let index = course.content.length -1 ; index >= 0; index--) {
             if(course.content[index].type === 'Unit')
                 if(course.content[index]._id === unitId){
+                    course.lessonCount += 1
+
                     course.content.push({
                         type:'quiz',
                         _id,
@@ -208,6 +216,7 @@ const addQuiz = async (req , res) => {
                     foundUnit = true
                 if(foundUnit){
                     if(obj.type === "Unit" && obj._id !== unitId){
+                        course.lessonCount += 1
                         newContent.push({
                             type:'quiz',
                             _id,
@@ -236,9 +245,12 @@ const addQuiz = async (req , res) => {
 
 const removeLessons = async(req, res) => {
     try {
-        const course = req.course
+        const courseId = req.course
         const { lessonId } = req.params
-
+        const course = await Course.findById(courseId)
+        if(!course)
+            return res.status(404).json({msg : "Course not found"})
+        course.lessonCount -= 1
         course.content = course.content.filter(lesson => lesson._id !== lessonId || lesson.type === "Unit")
         await course.save()
         res.status(200).json({msg : "Lesson remove successfully"})

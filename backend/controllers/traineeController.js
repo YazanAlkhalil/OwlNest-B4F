@@ -4,14 +4,6 @@ const Course = require('../models/coursesModel')
 const crypto = require('crypto')
 const mongoose = require('mongoose');
 
-const getCompanies = async (req , res) => {
-    try{
-        let companies = await Company.find().select("_id companyName logo")
-        return res.status(200).json(companies);
-    } catch (error) {
-        res.status(500).json({msg : error.message})
-    }
-}
 
 const getCompanyCources = async (req, res) => {
     const companyId = new mongoose.Types.ObjectId(req.params.companyId);
@@ -25,9 +17,10 @@ const getCompanyCources = async (req, res) => {
       }
   
       const result = await Promise.all(courses.map(async (course) => {
-        const completionProgressDoc = await Trainees.findOne({ courseId: course._id, userId: loggedInUserId }).select("completionProgress");
+        const completionProgressDoc = await Trainees.find({ courseId: course._id, userId: loggedInUserId }).select("completionProgress");
         const completionProgress = completionProgressDoc ? completionProgressDoc.completionProgress : 0;
         return {
+            id: course._id,
           courseName: course.courseName,
           image: course.image,
           completionProgress,
@@ -72,10 +65,10 @@ const getlesson = async (req,res) => {
         return res.status(404).json({ message: "Lesson not found" });
         }
 
-        const { grade, questions } = lesson;
+        const { name ,grade, questions } = lesson;
         const answers = questions.flatMap((question) => question.answers);
 
-        return res.status(200).json({ courseName: course.courseName, grade, answers });
+        return res.status(200).json({ courseName: course.courseName,name, grade, answers });
     } catch (error){
         res.status(500).json({msg : error.message})
     }

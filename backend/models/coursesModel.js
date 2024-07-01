@@ -28,7 +28,10 @@ const courseSchema = mongoose.Schema({
     },
     content : [{
         type : Object
-    }]
+    }],
+    lessonsCount : {
+        type: Number,
+    }
 })
 
 const Course = mongoose.model('Course',courseSchema);
