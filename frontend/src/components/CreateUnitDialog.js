@@ -7,10 +7,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function FormDialog() {
+export default function FormDialog({addUnit}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
+    
     setOpen(true);
   };
 
@@ -53,7 +54,7 @@ export default function FormDialog() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Add</Button>
+          <Button onClick={addUnit} type="submit">Add</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

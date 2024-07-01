@@ -32,7 +32,7 @@ function LoginPage() {
         }
         else{
             localStorage.setItem('user', JSON.stringify(data));
-            navigate('/home')
+            navigate('/company')
         }
 
     }

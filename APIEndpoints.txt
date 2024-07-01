@@ -67,7 +67,7 @@ return: [{id,name,,image},....]
 
 --------------------------------
 
-GET /api/trainer/courses/:courseId
+GET /api/trainer/courses/:courseId/content
 return: {id,name,image,description,content:[
 {type:unit,id,title},
 {type:lesson,id,name,content:(video),description},

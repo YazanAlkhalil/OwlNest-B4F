@@ -78,9 +78,9 @@ const getQuizSolution = async (req,res) => {
     const {traineeAnswer}= req.body
      answers = questions.flatMap((question) => question.answers);
 
-    let grade = traineeAnswer.map(a=>{
-      if(a.id == ) 
-    })
+    // let grade = traineeAnswer.map(a=>{
+    //   if(a.id == ) 
+    // })
 }
 module.exports = {
 getCompanyCources,

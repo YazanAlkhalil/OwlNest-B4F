@@ -120,17 +120,21 @@ const addUserToCourse = async (req, res) => {
         if (!user) {
             return res.status(404).json({ msg: "User not found" });
         }
-        const company = course.companyId
-        const trainee = await Trainee.findOne({userId , courseId : course._id})
-        const contracts = await Contract.findOne({companyId : company._id , userId})
 
+        const company = course.companyId
+        let contracts = await Contract.find({companyId : company._id , userId})
+        
         if(company.ownerId.toString() !== loggedInUserId.toString() && !company.admins.find(admin => admin.toString() === loggedInUserId.toString())){
             return res.status(401).json({message: 'Unauthorized'})
         }
+        if(company.ownerId.toString() !== userId.toString() && !company.admins.find(admin => admin.toString() === userId.toString()) && !contracts){
+            return res.status(401).json({message: 'User in not in company'})
+        }
+        const trainee = await Trainee.findOne({userId , courseId : course._id})
         if(trainee){
             return res.status(400).json({msg : "User Already Exists in course"})
         }
-        
+        contracts = contracts.filter(contract => contract.role === 'trainer')[0]
         if (role === 'trainer') {
             if(company.ownerId.toString() === userId.toString() || company.admins.find(admin => admin.toString() === userId.toString()) || contracts.role === "trainer"){
                 course.trainers.push(user._id);

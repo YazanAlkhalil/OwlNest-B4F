@@ -226,14 +226,16 @@ const getCompanies = async (req, res) => {
         let company = await Company.find()
         let contracts = await Contract.find({userId : loggedInUserId}).populate('companyId')
         if(company){
-            company = company.filter(company => company.admins.find(id => id.toString() === loggedInUserId.toString()) || company.ownerId.toString() === loggedInUserId.toString()).map(company => company.logo)
+            company = company.filter(company => company.admins.find(id => id.toString() === loggedInUserId.toString()) || company.ownerId.toString() === loggedInUserId.toString()).map(company => {return {_id:company._id ,logo: company.logo}})
             if(company.length > 0)
-            logos.add(...company)
+                company.forEach((item) => logos.add(item));
+            console.log(logos);
         }
         if(contracts){
-            contracts = contracts.map(contract => contract.companyId.logo)
+            contracts = contracts.map(contract => {return{_id:contract.companyId._id,logo:contract.companyId.logo}})
             if(contracts.length > 0){
-            logos.add(...contracts)
+                contracts.forEach((item) => logos.add(item));
+                
         }}
         res.status(200).json([...logos])
     } catch (error) {

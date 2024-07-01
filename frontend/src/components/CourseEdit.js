@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import Unit from './Unit';
@@ -9,6 +9,9 @@ import AdditionalInfo from './AdditionalInfo';
 import UploadVideo from './UploadVideo';
 import UploadPDF from './UploadPDF';
 import CreateQuiz from './CreateQuiz';
+import {useParams} from 'react-router-dom'
+import toast from 'react-hot-toast';
+import def from '../assets/images/default-course-thumbnail.png'
 
 function CourseEdit() {
   const [isInfo, setIsInfo] = useState(false)
@@ -16,45 +19,35 @@ function CourseEdit() {
   const [isUploadingPDF, setIsUploadingPDF] = useState(false)
   const [createQuiz, setCreateQuiz] = useState(false)
   const [sortable, setSortable] = useState(false)
-  const [content, setContent] = useState([
-    {
-      type: "unit",
-      name: "unit 1",
-      id: "12",
-    },
-    {
-      type: "lesson",
-      content: "video",
-      name: "video 1",
-      id: "12",
-    },
-    {
-      type: "lesson",
-      content: "pdf",
-      name: "pdf 1",
-      id: "12",
-    },
-    {
-      type: "lesson",
-      content: "quiz",
-      name: "quiz 1",
-      id: "12",
-    },
-    {
-      type: "unit",
-      name: "unit 2",
-      id: "23",
-    },
-    {
-      type: "lesson",
-      content: "quiz",
-      name: "quiz 2",
-      id: "4",
-    },
-    
-
-
-  ])
+  const [content, setContent] = useState([])
+  const [course,setCourse]= useState({
+    name:"",
+    description:"",
+    image:""
+  })
+  const {id} = useParams()
+  console.log(id);
+  const getDetails = async ()=>{
+    const res = await fetch(`http://localhost:5000/api/trainer/courses/${id}/content`,
+      {
+        credentials:'include'
+      })
+      const data = await res.json()
+      if(!res.ok)
+        toast.error(data.msg)
+      else{
+        console.log(data,'s');
+        setContent(data.content)
+        setCourse({
+          name: data.courseName,
+          description: data.description,
+          image: data.image ? data.image  : def,
+        })
+      }
+  }
+  useEffect(()=> {
+    getDetails()
+  },[])
 
   if (isInfo)
     return <AdditionalInfo close={() => setIsInfo(false)} />
@@ -76,17 +69,33 @@ function CourseEdit() {
       });
     }
   }
-  function addUnit(name) {
-
+  async function addUnit(name) {
+    const res = await fetch(`http://localhost:5000/api/trainer/courses/${id}/units`,{
+      method: 'POST',
+      credentials:'include',
+      headers:{
+        'Content-Type':"application/json"
+      },
+      body: JSON.stringify({
+        title: name
+      })
+    })
+    const data = await res.json()
+    if(!res.ok){
+      toast.error(data.msg)
+    }
+    else{
+      getDetails()
+    }
   }
   return (
     <>
       <div className='flex justify-between '>
-        <div className='flex'>
-          <img className='mr-4 rounded w-3/5' src={image} />
-          <div className='pr-40'>
-            <h1 className='text-xl font-bold'>Course name</h1>
-            <p className='mt-4 text-md font-light'>Course description goes here Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent aliquam aliquet erat eget placerat. Duis sodales aliquet justo fermentum tempor. Quisque ipsum urna, imperdiet et tristique in, eleifend non nulla. Mauris vel porta sapien. Nunc maximus sed leo eget varius. Proin vitae tempus sem, ut rutrum </p>
+        <div className='flex w-full'>
+          <img className='mr-4 rounded w-2/6' src={course.image} />
+          <div className='flex-grow'>
+            <h1 className='text-xl font-bold'>{course.name}</h1>
+            <p className='mt-4 text-md font-light'>{course.description} </p>
           </div>
         </div>
         <div>
@@ -99,7 +108,7 @@ function CourseEdit() {
         <button className='mr-2 text-xl border border-solid border-secondary px-3 py-2 hover:bg-secondary hover:text-white rounded  text-secondary' onClick={() => setSortable(!sortable)}>
           {sortable ? 'save' : 'reorder'}
         </button>
-        <FormDialog />
+        <FormDialog addUnit={addUnit}/>
       </div>
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <div >

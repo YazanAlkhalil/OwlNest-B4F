@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Company({image}) {
+export default function Company({image,id}) {
     const navigate = useNavigate()
     function handleCompanyClick() {
-        navigate('/trainee',{replace: true});
+        localStorage.setItem('companyId',id)
+        navigate('/trainee');
     }
   return (
       <div class="border-accent flex justify-center items-center border-4 rounded-md p-4 bg-primary hover:bg-hover cursor-pointer" onClick={handleCompanyClick}>
