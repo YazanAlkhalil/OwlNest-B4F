@@ -23,7 +23,6 @@ import dayjs from 'dayjs'
 function RegisterPage() {
     const navigate = useNavigate()
     const [fistPage, setFistPage] = useState(false)
-    const [value, setValue] = useState(null);
     const [username,setUsername] = useState('')
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')

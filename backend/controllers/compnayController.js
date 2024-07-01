@@ -203,17 +203,39 @@ const getRole = async (req, res) => {
         const loggedInUser = req.user._id
         const company = await Company.findById(companyId).select("admins")
         const roles = []
-        const contracts = await Contract.findOne({companyId})
+        const contracts = await Contract.findOne({companyId , userId:loggedInUser})
 
         if(company.admins.includes(loggedInUser)){
             roles.push("admin")
         }
-        if(loggedInUser.toString() === contracts.userId.toString()){
-            roles.push(contracts.role)
+        if(contracts && contracts.role === "trainer"){
+            roles.push("trainer")
         }
 
         res.status(200).json(roles)
         
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+const getCompanies = async (req, res) => {
+    try {
+        const loggedInUserId = req.user._id
+        const logos = new Set()
+        let company = await Company.find()
+        let contracts = await Contract.find({userId : loggedInUserId}).populate('companyId')
+        if(company){
+            company = company.filter(company => company.admins.find(id => id.toString() === loggedInUserId.toString()) || company.ownerId.toString() === loggedInUserId.toString()).map(company => company.logo)
+            if(company.length > 0)
+            logos.add(...company)
+        }
+        if(contracts){
+            contracts = contracts.map(contract => contract.companyId.logo)
+            if(contracts.length > 0){
+            logos.add(...contracts)
+        }}
+        res.status(200).json([...logos])
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -225,5 +247,6 @@ module.exports = {
     getUsersFromCompany,
     updateUserRole,
     removeUserFromCompany,
-    getRole
+    getRole,
+    getCompanies
 }

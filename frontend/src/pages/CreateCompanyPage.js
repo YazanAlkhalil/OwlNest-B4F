@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 function CreateCompanyPage() {
     const navigate = useNavigate()
+
     return (
         <div className='grid grid-cols-2'>
             <div className='flex flex-col justify-center items-center'>

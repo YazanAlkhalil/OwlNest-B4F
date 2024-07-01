@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router()
 const adminController = require('../controllers/courseConroller')
-const protectRoute = require('../middlewares/protectRoute')
 
 router.get('/courses/:companyId' , adminController.getCourses)
 router.post('/courses/:companyId' , adminController.createCourse)

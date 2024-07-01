@@ -30,6 +30,9 @@ function VerificationPage() {
         const data = await res.json()
         if(!res.ok){
             toast.error(data.msg)
+        }else {
+            toast.success(data.msg)
+            navigate('/create')
         }
 
         const timer = setInterval(() => {
