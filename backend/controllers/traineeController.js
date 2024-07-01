@@ -66,16 +66,21 @@ const getlesson = async (req,res) => {
         }
 
         const { name ,grade, questions } = lesson;
-        const answers = questions.flatMap((question) => question.answers);
-
-        return res.status(200).json({ courseName: course.courseName,name, grade, answers });
+        
+        return res.status(200).json({ courseName: course.courseName,name, grade, questions });
     } catch (error){
         res.status(500).json({msg : error.message})
     }
 }
 
 const getQuizSolution = async (req,res) => {
-    getlesson(req,res)
+    let {answers} = getlesson(req,res)
+    const {traineeAnswer}= req.body
+     answers = questions.flatMap((question) => question.answers);
+
+    let grade = traineeAnswer.map(a=>{
+      if(a.id == ) 
+    })
 }
 module.exports = {
 getCompanies,
