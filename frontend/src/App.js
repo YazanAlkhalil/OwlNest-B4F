@@ -27,6 +27,9 @@ import TraineeProgress from './components/TraineeProgress'
 import TraineeLesson from './components/TraineeLesson'
 import TraineeDiscussion from './components/TraineeDiscussion'
 import TraineeInfor from './components/TraineeInfor'
+
+import TraineePdf from './components/TraineePdf';
+import TraineeQuiz from './components/TraineeQuiz';
 import LandingPage from'./pages/LandingPage'
 
 
@@ -66,7 +69,9 @@ function App() {
           <Route path="/trainee/courses/:id" element={<CourseLayout />}>
             <Route path="/trainee/courses/:id" element={<Navigate to="/trainee/courses/:id/content" replace />} />
             <Route path="/trainee/courses/:id/content" element={<TraineeCourseDisplay />} />
-            <Route path="/trainee/courses/:id/content/lesson" element={<TraineeLesson />} />
+            <Route path="/trainee/courses/:id/content/video" element={<TraineeLesson />} />
+            <Route path="/trainee/courses/:id/content/pdf" element={<TraineePdf />} />
+            <Route path="/trainee/courses/:id/content/quiz" element={<TraineeQuiz />} />
             <Route path="/trainee/courses/:id/progress" element={<TraineeProgress />} />
             <Route path="/trainee/courses/:id/discussion" element={<TraineeDiscussion />} />
             <Route path="/trainee/courses/:id/Info" element={<TraineeInfor/>} />
