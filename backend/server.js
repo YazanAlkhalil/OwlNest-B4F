@@ -19,7 +19,7 @@ app.use(cors({
 }))
 
 app.use("/api/auth" , auth)
-app.use('/api/admin',protectRoute.protectRoute , course)
+app.use('/api/admin/courses',protectRoute.protectRoute , course)
 app.use('/api/admin',protectRoute.protectRoute , company)
 app.use('/api/trainer', protectRoute.protectRoute , trainer)
 app.use("/api/companies",protectRoute.protectRoute,trainee)

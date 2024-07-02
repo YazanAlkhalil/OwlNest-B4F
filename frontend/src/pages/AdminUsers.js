@@ -10,22 +10,27 @@ function AdminUsers() {
   const [searchValue, setSearchValue] = useState('');
   const [filteredData, setFilteredData] = useState([]);
 
-  useEffect(() => {
-    const getUsersFromCompany = async () => {
-      try {
-        const res = await fetch('http://localhost:5000//api/admin/:companyId/users');
-        const result = await res.json();
-        if (!res.ok) {
-          toast.error(data.msg)
-        }
+  const getUsersFromCompany = async () => {
+    try {
+      const companyId = localStorage.getItem('companyId');
+      const res = await fetch(`http://localhost:5000/api/admin/${companyId}/users`,{
+        credentials : "include"
+      });
+      const result = await res.json();
+      if (!res.ok) {
+        toast.error(result.msg)
+      }else {
         setData(result);
         setFilteredData(result);
-      } catch (error) {
-        console.log(error.message);
       }
-    };
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  useEffect(() => {
 
     getUsersFromCompany();
+
   }, []);
 
   useEffect(() => {
@@ -41,7 +46,7 @@ function AdminUsers() {
   return (
     <div>
       <div className='flex justify-between items-center'>
-        <FormDialog className='self-start' />
+        <FormDialog className='self-start' onUserAdded={getUsersFromCompany}/>
         <TextField
           placeholder='search'
           id="input-with-icon-textfield"
@@ -63,7 +68,7 @@ function AdminUsers() {
         <div className='bg-secondary text-white p-4'>Last login</div>
         <div className='bg-secondary text-white p-4 rounded-r'>Actions</div>
         {filteredData.map((user, index) => (
-          <UserInCourseAdmin key={JSON.stringify(user)} index={index} user={user} />
+          <UserInCourseAdmin key={JSON.stringify(user)} index={index} user={user} onUserRemoved={getUsersFromCompany} onRoleUpdated={getUsersFromCompany} />
         ))}
       </div>
     </div>

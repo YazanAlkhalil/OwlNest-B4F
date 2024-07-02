@@ -56,7 +56,6 @@ const getUsersFromCompany = async (req, res) => {
         const loggedInUserId = req.user._id
         const contracts = await Contract.find({ companyId }).populate('userId');
         const company = await Company.findById(companyId).populate('admins', 'username');
-
         
         if (!company) {
             return res.status(404).json({ msg: 'Company not found' });
@@ -65,14 +64,14 @@ const getUsersFromCompany = async (req, res) => {
         if(company.ownerId.toString() !== loggedInUserId.toString() && !company.admins.find(admin => admin._id.toString() === loggedInUserId.toString())){
             return res.status(401).json({msg: 'Unauthorized'})
         }
-
-
         
         const adminUsernames = company.admins.map(admin => ({
+            id : admin._id,
             name : admin.username,
             role : "admin"
         }));
         const users = contracts.map(contract => ({
+            id : contract.userId._id,
             name: contract.userId.username,
             role: contract.role,
             lastLogin: contract.userId.updatedAt
@@ -170,7 +169,7 @@ const removeUserFromCompany = async (req, res) => {
         if(company.ownerId.toString() === loggedInUser.toString()){
             loggedInUserRole = "owner"
         }
-        else if(admin ){
+        else if(admin){
             loggedInUserRole = "admin"
         }else {
             return res.status(401).json({ msg : "UnAuthorized" })
@@ -188,7 +187,8 @@ const removeUserFromCompany = async (req, res) => {
             await Contract.deleteOne({ companyId, userId });
         }
         else{
-            company.admins = company.admins.filter(admin => admin.toString() === user._id.toString())
+            company.admins = company.admins.filter(admin => admin.toString() !== user._id.toString())
+            console.log(company.admins);
             await company.save()
         }
         res.status(200).json({ msg: 'User removed from company successfully' });
@@ -231,7 +231,7 @@ const getCompanies = async (req, res) => {
                 company.forEach((item) => logos.add(item));
         }
         if(contracts){
-            contracts = contracts.map(contract => {return{_id:contract.companyId._id,logo:contract.companyId.logo}})
+            contracts = contracts.map(contract => {({_id:contract.companyId._id,logo:contract.companyId.logo})})
             if(contracts.length > 0){
                 contracts.forEach((item) => logos.add(item));
                 

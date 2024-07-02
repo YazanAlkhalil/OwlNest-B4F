@@ -58,7 +58,7 @@ export default function FormDialog({ onUserAdded }) {
                 reset();
             }
         } catch (error) {
-            toast.error('An error occurred while adding the user.');
+            console.log(error.message);
         }
     }
 
