@@ -1,0 +1,40 @@
+.divNav{
+    background-color: #003356;
+    display: flex;
+    height: 83px;
+    padding: 10px;
+    align-items: center;
+}
+.imgNav{
+    width: 50.77px;
+    height: 60px;
+}
+.logoNav{
+    color: white;
+    font-size: 40px;
+}
+.divSearch{
+    width: 451px;
+    height: 45px;
+    border: white 1px solid;
+    border-radius: 30px;
+    margin: auto;
+    padding: 10px;
+}.search{
+    color: white;
+}
+.login{
+    width: 105px;
+    height: 45px;
+    border: white 1px solid;
+    border-radius: 30px;
+    color: white;
+    margin-right: 20px;
+}
+.register{
+    width: 105px;
+    height: 45px;
+    border: white 1px solid;
+    border-radius: 30px;
+    color: white;
+}
