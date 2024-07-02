@@ -182,24 +182,29 @@ const getUsersByCourseId = async (req, res) => {
         const contracts = await Contract.find({companyId:company._id}).populate('userId','username email')
 
         const trainers = course.trainers.map(trainer => ({
+            _id : trainer._id,
             name: trainer.username,
             email: trainer.email,
             role: 'trainer',
             isParticipant : true
         }))
         trainees = trainees.map(trainee => ({
+            _id : trainee.userId._id,
             name : trainee.userId.username,
             email : trainee.userId.email,
             role : 'trainee',
             isParticipant:true,
             completionDate: trainee.completionDate
         }))
+        trainees = trainees.filter(trainee => {trainers.find(trainer => {
 
-        trainees = trainees.filter(trainee => trainers.find(trainer => trainer.email === trainee.email))
+            return trainer.email !== trainee.email})})
+
 
         const participants = [...trainers,...trainees]
 
         const adminUsernames = company.admins.map(admin => ({
+            _id: admin._id,
             name : admin.username,
             email: admin.email,
             role : "admin",
@@ -207,6 +212,7 @@ const getUsersByCourseId = async (req, res) => {
         }));
 
         const users = contracts.map(contract => ({
+            _id : contract.userId._id,
             name: contract.userId.username,
             email: contract.userId.email,
             role: contract.role,
