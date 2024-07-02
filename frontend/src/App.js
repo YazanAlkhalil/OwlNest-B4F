@@ -27,8 +27,7 @@ import TraineeProgress from './components/TraineeProgress'
 import TraineeLesson from './components/TraineeLesson'
 import TraineeDiscussion from './components/TraineeDiscussion'
 import TraineeInfor from './components/TraineeInfor'
-import { Provider } from 'react-redux';
-import { store } from './RTK/store';
+import LandingPage from'./pages/LandingPage'
 
 
 function App() {
@@ -37,6 +36,13 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+
+          <Route path="/" element={<LandingPage/>}>
+          
+
+          </Route>
+
+
           {/* auth routes */}
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />
@@ -83,6 +89,10 @@ function App() {
           <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="/admin/user-details" element={<AdminUserDetail/>} />
         </Route>
+
+
+     
+       
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
