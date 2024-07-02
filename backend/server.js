@@ -17,7 +17,7 @@ app.use(cors({
     origin : "http://localhost:3000",
     credentials : true
 }))
-
+app.use('/uploads', express.static('uploads'));
 app.use("/api/auth" , auth)
 app.use('/api/admin/courses',protectRoute.protectRoute , course)
 app.use('/api/admin',protectRoute.protectRoute , company)
