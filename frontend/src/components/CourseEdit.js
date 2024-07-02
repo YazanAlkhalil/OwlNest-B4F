@@ -3,7 +3,6 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import Unit from './Unit';
 import Lesson from './Lesson';
-import image from '../assets/images/course__cs101_courses_datastructuresfromctopython__course-promo-image-1653540139 1.png'
 import FormDialog from './CreateUnitDialog'
 import AdditionalInfo from './AdditionalInfo';
 import UploadVideo from './UploadVideo';
@@ -12,6 +11,8 @@ import CreateQuiz from './CreateQuiz';
 import {useParams} from 'react-router-dom'
 import toast from 'react-hot-toast';
 import def from '../assets/images/default-course-thumbnail.png'
+
+
 
 function CourseEdit() {
   const [isInfo, setIsInfo] = useState(false)
@@ -25,8 +26,8 @@ function CourseEdit() {
     description:"",
     image:""
   })
+  console.log(content);
   const {id} = useParams()
-  console.log(id);
   const getDetails = async ()=>{
     const res = await fetch(`http://localhost:5000/api/trainer/courses/${id}/content`,
       {
@@ -36,7 +37,6 @@ function CourseEdit() {
       if(!res.ok)
         toast.error(data.msg)
       else{
-        console.log(data,'s');
         setContent(data.content)
         setCourse({
           name: data.courseName,
@@ -53,11 +53,11 @@ function CourseEdit() {
     return <AdditionalInfo close={() => setIsInfo(false)} />
 
   if (isUploadingVideo)
-    return <UploadVideo submit={() => setIsUploadingVideo(false)} />
+    return <UploadVideo getData={getDetails} submit={() => setIsUploadingVideo(false)} />
   if (isUploadingPDF)
-    return <UploadPDF submit={() => setIsUploadingPDF(false)} />
+    return <UploadPDF getData={getDetails} submit={() => setIsUploadingPDF(false)} />
   if (createQuiz)
-    return <CreateQuiz submit={() => setCreateQuiz(false)} />
+    return <CreateQuiz getDetails={getDetails} submit={() => setCreateQuiz(false)} />
 
   function handleDragEnd(e) {
     const { active, over } = e
@@ -88,6 +88,31 @@ function CourseEdit() {
       getDetails()
     }
   }
+
+
+  async function handleReorder(){
+    if(sortable){
+      const res= await fetch(`http://localhost:5000/api/trainer/courses/${id}/reorder`,{
+        credentials:'include',
+        method : 'PUT',
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({content})
+      })
+      const data = await res.json()
+      if(res.ok){
+        setSortable(false)
+      }
+      else{
+        toast.error(data.msg)
+      }
+    }
+    else
+      setSortable(true)
+  }
+
+
   return (
     <>
       <div className='flex justify-between '>
@@ -105,7 +130,7 @@ function CourseEdit() {
         </div>
       </div>
       <div className='flex justify-end mb-4'>
-        <button className='mr-2 text-xl border border-solid border-secondary px-3 py-2 hover:bg-secondary hover:text-white rounded  text-secondary' onClick={() => setSortable(!sortable)}>
+        <button onClick={handleReorder} className='mr-2 text-xl border border-solid border-secondary px-3 py-2 hover:bg-secondary hover:text-white rounded  text-secondary' >
           {sortable ? 'save' : 'reorder'}
         </button>
         <FormDialog addUnit={addUnit}/>
@@ -115,11 +140,12 @@ function CourseEdit() {
 
           <div >
             <SortableContext items={content} strategy={verticalListSortingStrategy}>
-              {content.map((item) => {
-                if (item.type == 'unit')
-                  return <Unit key={JSON.stringify(item)} createQuiz={() => setCreateQuiz(true)} uploadVideo={() => setIsUploadingVideo(true)} uploadPDF={() => setIsUploadingPDF(true)} sortable={sortable} item={item} />
-                if (item.type == 'lesson')
-                  return <Lesson sortable={sortable} key={JSON.stringify(item)} item={item} />
+              {
+              content.map((item) => {
+                if (item.type == 'Unit')
+                  return <Unit getDetails={getDetails} key={item.id} createQuiz={() => setCreateQuiz(true)} uploadVideo={() => setIsUploadingVideo(true)} uploadPDF={() => setIsUploadingPDF(true)} sortable={sortable} item={item} />
+                else
+                  return <Lesson getDetails={getDetails} sortable={sortable} key={item.id} item={item} />
               })}
             </SortableContext>
           </div>

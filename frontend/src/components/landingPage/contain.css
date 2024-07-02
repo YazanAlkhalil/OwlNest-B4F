@@ -1,0 +1,25 @@
+.cotain{
+    width:539px ;
+    height: 328px;
+    margin-left: 59px;
+    margin-top: 75px;
+}
+.b{
+    font-size: 36px;
+    color: #3F6188;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color:#003356 ;
+    text-shadow: 0px 0px 38.4px rgba(0, 0, 0, 0.25);
+}
+.bb{
+    color: white;
+}
+.start{
+    width: 250px;
+    height: 61px;
+    border-radius: 30px;
+    background: #003356;
+    font-size: 24px;
+    color: white;
+    margin-left: 50px;
+}

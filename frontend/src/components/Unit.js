@@ -5,12 +5,15 @@ import { FaPlay } from "react-icons/fa";
 import { FaRegFilePdf } from "react-icons/fa6";
 import { PiExam } from "react-icons/pi";
 import { MdDelete } from 'react-icons/md';
+import { useParams } from "react-router-dom";
 
-function Unit({ item, sortable, uploadVideo, uploadPDF, createQuiz }) {
+function Unit({getDetails,item, sortable, uploadVideo, uploadPDF, createQuiz }) {
+  const {id} = useParams()
   const [isOverlayVisible, setOverlayVisible] = useState(false);
   const overlayRef = useRef(null);
 
   const toggleOverlay = () => {
+    localStorage.setItem('unitId',item.id)
     setOverlayVisible(!isOverlayVisible);
   };
   const handleClickOutside = (event) => {
@@ -25,18 +28,25 @@ function Unit({ item, sortable, uploadVideo, uploadPDF, createQuiz }) {
     };
   }, []);
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: item.id });
+    useSortable({ id: item.id  });
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
   };
+  async function handleDelete(){
+    await fetch(`http://localhost:5000/api/trainer/courses/${id}/units/${item.id}`,{
+      method:"DELETE",
+      credentials:"include"
+    })
+    getDetails()    
+  }
 
   if (!sortable) {
     return (
       <div className="relative mb-2 py-2 px-2 h-12 pl-1 rounded flex justify-between items-center">
         <div>
           
-        <span className="text-2xl">{item.name} </span>
+        <span className="text-2xl">{item.title} </span>
         </div>
         <div className="flex items-center">
 
@@ -46,7 +56,7 @@ function Unit({ item, sortable, uploadVideo, uploadPDF, createQuiz }) {
         >
           add lesson
         </button>
-        <MdDelete onClick={{}} className='ml-2 hover:cursor-pointer box-content p-2  size-6 text-white rounded-full bg-red-300 hover:bg-red-500' />
+        <MdDelete onClick={handleDelete} className='ml-2 hover:cursor-pointer box-content p-2  size-6 text-white rounded-full bg-red-300 hover:bg-red-500' />
         </div>
         <div
           ref={overlayRef}
@@ -87,7 +97,7 @@ function Unit({ item, sortable, uploadVideo, uploadPDF, createQuiz }) {
       {...listeners}
       className="relative mb-2 pl-1 py-2 h-12 px-4 rounded flex justify-between items-center"
     >
-      <span className="text-2xl">{item.name} </span>
+      <span className="text-2xl">{item.title} </span>
     </div>
   );
 }

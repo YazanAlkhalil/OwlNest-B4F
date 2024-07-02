@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import ProgressBar from './ProgressBar';
 
-const VideoDropzone = ({ type }) => {
+const VideoDropzone = ({ type ,onFileUploaded }) => {
     const [uploadedFile, setUploadedFile] = useState(null);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [fileRejectionMessage, setFileRejectionMessage] = useState('');
@@ -14,6 +14,7 @@ const VideoDropzone = ({ type }) => {
         if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
             const file = acceptedFiles[0];
             setUploadedFile(file);
+            onFileUploaded(file);
             setFileRejectionMessage('');
             setUploadProgress(0);
             setUploadSuccess(false);
@@ -39,7 +40,7 @@ const VideoDropzone = ({ type }) => {
             setUploadSuccess(false);
 
         }
-    }, []);
+    }, [onFileUploaded]);
 
     const {
         getRootProps,

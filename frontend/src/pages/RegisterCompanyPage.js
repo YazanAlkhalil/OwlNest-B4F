@@ -54,7 +54,6 @@ function RegisterCompanyPage() {
         reader.readAsDataURL(file);
       }
       
-    console.log(company) 
 
     return (
         <div className='grid grid-cols-2'>

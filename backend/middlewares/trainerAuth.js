@@ -5,12 +5,10 @@ const trainerAuth = async (req , res , next) => {
         const loggedInUserId = req.user._id;
         const { courseId } = req.params
         
-
         const course = await Course.findById(courseId)
         if(!course){
             return res.status(404).json({msg : 'Course not found'})
         }
-
         if(course.trainers.includes(loggedInUserId)){
             req.course = course
             next()

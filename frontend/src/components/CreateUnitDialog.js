@@ -9,6 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 export default function FormDialog({addUnit}) {
   const [open, setOpen] = React.useState(false);
+  const [name,setName] = React.useState('')
 
   const handleClickOpen = () => {
     
@@ -34,6 +35,7 @@ export default function FormDialog({addUnit}) {
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries(formData.entries());
             const email = formJson.email;
+            addUnit(name)
             handleClose();
           },
         }}
@@ -49,12 +51,14 @@ export default function FormDialog({addUnit}) {
             label="Unit name"
             type="text"
             fullWidth
+            value={name}
+            onChange={(e)=>setName(e.target.value)}
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={addUnit} type="submit">Add</Button>
+          <Button  type="submit">Add</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

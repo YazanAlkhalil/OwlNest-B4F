@@ -8,7 +8,7 @@ export default function Company({image,id}) {
         navigate('/trainee');
     }
   return (
-      <div class="border-accent flex justify-center items-center border-4 rounded-md p-4 bg-primary hover:bg-hover cursor-pointer" onClick={handleCompanyClick}>
+      <div className="border-accent flex justify-center items-center border-4 rounded-md p-4 bg-primary hover:bg-hover cursor-pointer" onClick={handleCompanyClick}>
         <img
           className="w-1/2"
           src={image}

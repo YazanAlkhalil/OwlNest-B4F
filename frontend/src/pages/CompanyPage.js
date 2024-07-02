@@ -14,7 +14,6 @@ export default function CompanyPage() {
       const res = await fetch('http://localhost:5000/api/admin/companies', {
         credentials: "include"
       })
-      console.log(res);
       const data = await res.json()
       if (!res.ok) {
         toast.error(res.msg)
