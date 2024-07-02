@@ -53,7 +53,7 @@ const getlesson = async (req,res) => {
         let course = await Course.findOne({
             _id: courseObjectId,
             content: { $elemMatch: { lessonid: lessonObjectId } }
-        }).select("courseName content");
+        }).select("courseName content type");
 
         if (!course) {
         return res.status(404).json({ message: "Course or lesson not found" });
@@ -64,9 +64,21 @@ const getlesson = async (req,res) => {
         return res.status(404).json({ message: "Lesson not found" });
         }
 
+        if(course.type == "quiz"){
         const { name ,grade, questions } = lesson;
-
         return res.status(200).json({ courseName: course.courseName, name, grade, questions });
+        }
+
+        if(course.type == "video"){
+          const { name, content, description } = lesson;
+          return res.status(200).json({ courseName: course.courseName, name, content, description });
+        }
+
+        if(course.type == "pdf"){
+          const { name, content } = lesson;
+          return res.status(200).json({ courseName: course.courseName, name, content });
+        }
+        
     } catch (error){
         res.status(500).json({msg : error.message})
     }
