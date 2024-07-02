@@ -10,13 +10,25 @@ function PdfViewer() {
   }
 
   return (
-    <div> 
-      <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false}/>
-      </Document>
-      <p>
+    <div className='pdf-div'> 
+    <p>
         Page {pageNumber} of {numPages}
       </p>
+      <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+        {Array.map(null,Array(numPages)).map((x,i)=>i+1).map(page=>{return(
+
+            <Page
+            pageNumber={page}
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
+
+            />
+        )
+
+        })}
+        <Page pageNumber={pageNumber} renderTextLayer={false} renderAnnotationLayer={false}/>
+      </Document>
+      
     </div>
   );
 }
