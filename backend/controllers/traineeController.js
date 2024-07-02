@@ -128,12 +128,13 @@ const lessonDone = async (req,res) => {
     const loggedInUserId = req.user._id
     const courseId  = req.params.courseId
     const lessonId = req.params.lessonId
+
     let updateCompletionProgress = await Trainees.findOne({userId:loggedInUserId,courseId:courseId})
       updateCompletionProgress.completionProgress.push(lessonId)
       await updateCompletionProgress.save()
 
       let updateXP = await Trainees.findOne({userId:loggedInUserId,courseId:courseId})
-      updateXP.XP += (10*totalgrade)
+      updateXP.XP += 10
       await updateXP.save()
 
       res.status(200).send("done")
@@ -143,8 +144,33 @@ const lessonDone = async (req,res) => {
 }
 
 const progress = async (req,res) => {
-  
+  try{
+    
+    const loggedInUserId = req.user._id
+    const courseId  = req.params.courseId
+
+    let updateCompletionProgress = await Trainees.findOne({userId:loggedInUserId,courseId:courseId})
+    let completionProgress = updateCompletionProgress.completionProgress.length()
+    let lessonsCount = await Course.findOne({courseId})
+    lessonsCount = lessonsCount.lessonsCount
+    completionProgress = completionProgress/lessonsCount
+
+    let updateXP = await Trainees.findOne({userId:loggedInUserId,courseId:courseId})
+    const XP = updateXP.XP
+
+    let finalGrade = 0
+    let gradeArray = await Trainees.findOne({userId:loggedInUserId,courseId:courseId})
+    let grade = gradeArray.grade.map(grade => finalGrade += grade.grade ) 
+    grade = (grade/gradeArray.grade.length())
+    
+    //just add the % in the front 
+    res.status(200).send({completionProgress,XP,grade})
+  }catch (error){
+    res.status(500).send({Msg: error.message})
+  }
 }
+
+
 module.exports = {
 getCompanyCources,
 getcourseinfo,
