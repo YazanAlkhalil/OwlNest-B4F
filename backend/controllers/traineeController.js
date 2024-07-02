@@ -122,9 +122,34 @@ const getQuizSolution = async (req,res) => {
     } 
 }
 
+const lessonDone = async (req,res) => {
+
+  try{
+    const loggedInUserId = req.user._id
+    const courseId  = req.params.courseId
+    const lessonId = req.params.lessonId
+    let updateCompletionProgress = await Trainees.findOne({userId:loggedInUserId,courseId:courseId})
+      updateCompletionProgress.completionProgress.push(lessonId)
+      await updateCompletionProgress.save()
+
+      let updateXP = await Trainees.findOne({userId:loggedInUserId,courseId:courseId})
+      updateXP.XP += (10*totalgrade)
+      await updateXP.save()
+
+      res.status(200).send("done")
+    }catch (error){
+      res.status(500).send({Msg: error.message})
+    }
+}
+
+const progress = async (req,res) => {
+  
+}
 module.exports = {
 getCompanyCources,
 getcourseinfo,
 getlesson,
-getQuizSolution
+getQuizSolution,
+lessonDone,
+progress
 }
