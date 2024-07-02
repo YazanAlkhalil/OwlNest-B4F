@@ -1,6 +1,7 @@
 const Users = require('../models/usersModel')
 const Company = require('../models/companyModel')
 const Contract = require('../models/contractModel')
+const Course = require('../models/coursesModel')
 const addUserToCompnay = async (req,res) => {
     try {
         const { email , role } = req.body
@@ -201,14 +202,13 @@ const getRole = async (req, res) => {
     try {
         const { companyId } = req.params
         const loggedInUser = req.user._id
-        const company = await Company.findById(companyId).select("admins")
+        const company = await Company.findById(companyId).select("ownerId admins")
         const roles = []
-        const contracts = await Contract.findOne({companyId , userId:loggedInUser})
-
-        if(company.admins.includes(loggedInUser)){
+        const courses = await Course.find({companyId})
+        if(company.ownerId.toString() === loggedInUser.toString() || company.admins.includes(loggedInUser)){
             roles.push("admin")
         }
-        if(contracts && contracts.role === "trainer"){
+        if(courses && courses.find(course => course.trainers.find(trainer => trainer.toString() === loggedInUser.toString() ))){
             roles.push("trainer")
         }
 
@@ -229,7 +229,6 @@ const getCompanies = async (req, res) => {
             company = company.filter(company => company.admins.find(id => id.toString() === loggedInUserId.toString()) || company.ownerId.toString() === loggedInUserId.toString()).map(company => {return {_id:company._id ,logo: company.logo}})
             if(company.length > 0)
                 company.forEach((item) => logos.add(item));
-            console.log(logos);
         }
         if(contracts){
             contracts = contracts.map(contract => {return{_id:contract.companyId._id,logo:contract.companyId.logo}})

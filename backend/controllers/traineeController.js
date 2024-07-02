@@ -11,7 +11,6 @@ const getCompanyCources = async (req, res) => {
   
     try {
       const courses = await Course.find({ companyId: companyId }).select("courseName image");
-      console.log(`Courses found: ${courses.length}`);
       if (!courses.length) {
         return res.status(404).json({ message: "No courses found" });
       }

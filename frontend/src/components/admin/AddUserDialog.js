@@ -38,7 +38,6 @@ export default function FormDialog({ onUserAdded }) {
     async function handleSubmit() {
         try {
             const companyId = localStorage.getItem('companyId')
-            console.log(companyId);
             const res = await fetch(`http://localhost:5000/api/admin/${companyId}/users`, {
                 method: 'POST',
                 credentials : 'include',
