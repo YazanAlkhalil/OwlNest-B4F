@@ -1,0 +1,9 @@
+.inc{
+    color: #FFF;
+-webkit-text-stroke-width: 1;
+-webkit-text-stroke-color: #003356;
+font-family: Poppins;
+font-size: 24px;
+width: 100px;
+height: 162px;
+}
