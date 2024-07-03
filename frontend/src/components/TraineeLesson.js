@@ -1,27 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
 import ChatComponent from "./chatComponent";
 import { useDispatch } from "react-redux";
 import { toggleChat } from "../RTK/slices/chatSlice";
+import toast from "react-hot-toast";
 
 export default function TraineeLesson() {
+  const [description,setDescription]= useState('')
+  const [title,setTitle]= useState('')
+  const [filename,setFilename]= useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate();
+  const {id}= useParams()
+  const lesson = localStorage.getItem('lessonId')
   const onGoBackClick = () => {
-    navigate('/trainee/courses/:id/content')
+    navigate(`/trainee/courses/${id}/content`)
   };
+  useEffect(()=>{
+    const getVideo = async ()=>{
+      const res = await fetch(`http://localhost:5000/api/trainee/courses/${id}/lessons/${lesson}`,{
+        credentials:'include'
+      })
+      const data = await res.json()
+      if(!res.ok){
+        toast.error(data.message)
+      }
+      else{
+        setTitle(data.title)
+        setDescription(data.description)
+        setFilename(data.filename)
+      }
+    }
+    getVideo()
+  },[])
   return (
     <div>
       <BiArrowBack 
       className="size-6 hover:cursor-pointer"
       onClick={onGoBackClick}/>
       <div className="mt-10">
+        <h1 className="text-xl">{title}</h1>
         <video className="h-[70%] mx-auto w-[70%] rounded-lg" controls>
           <source
-            src="https://docs.material-tailwind.com/demo.mp4"
+            src={'http://localhost:5000/uploads/'+filename}
             type="video/mp4"
           />
           Your browser does not support the video tag.
@@ -30,16 +54,7 @@ export default function TraineeLesson() {
       <div className="w-[70%] mt-10 mx-auto">
         <h1 className="text-2xl font-semibold">Description : </h1>
         <p className="text-md px-5 py-10">
-          lorem lorem lorem loremlorem loremlorem loremlorem loremlorem
-          loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem
-          loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem
-          loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem
-          loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem
-          loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem
-          loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem
-          loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem
-          loremlorem loremlorem loremlorem loremlorem loremlorem loremlorem
-          loremlorem loremlorem loremlorem loremlorem lorem{" "}
+          {description}
         </p>
       </div>
       <div className="w-[70%] mx-auto flex justify-end">
