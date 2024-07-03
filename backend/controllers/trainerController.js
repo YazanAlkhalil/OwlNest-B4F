@@ -284,7 +284,6 @@ const removeLessons = async (req, res) => {
 }
 
 const updateContent = async (req, res) => {
-    console.log("aaaaaaa");
     try {
         const course = req.course
         const { content } = req.body
@@ -292,7 +291,6 @@ const updateContent = async (req, res) => {
             item._id = item.id,
             delete item.id
         })
-        console.log(content);
         course.content = content
         await course.save()
         res.status(200).json({ msg: "Content updated successfully", course })

@@ -15,7 +15,6 @@ export default function CompanyPage() {
         credentials: "include"
       })
       const data = await res.json()
-      console.log(data);
       if (!res.ok) {
         toast.error(res.msg)
       }

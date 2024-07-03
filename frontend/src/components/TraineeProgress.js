@@ -12,7 +12,6 @@ export default function TraineeProgress() {
         credentials:'include'
       })
       const data = await res.json()
-      console.log(data);
     }
     getProgress()
   },[])

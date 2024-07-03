@@ -12,7 +12,9 @@ export default function TraineeLesson() {
   const [description,setDescription]= useState('')
   const [title,setTitle]= useState('')
   const [filename,setFilename]= useState('')
+  let video;
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate();
   const {id}= useParams()
   const lesson = localStorage.getItem('lessonId')
@@ -29,13 +31,17 @@ export default function TraineeLesson() {
         toast.error(data.message)
       }
       else{
+        video = await fetch('http://localhost:5000/uploads/'+data.filename)
         setTitle(data.title)
         setDescription(data.description)
         setFilename(data.filename)
+        console.log("Filename set:", data.filename)
+        setLoading(false)
       }
     }
     getVideo()
   },[])
+  console.log("Video URL:", "http://localhost:5000/uploads/"+filename)
   return (
     <div>
       <BiArrowBack 
@@ -43,13 +49,14 @@ export default function TraineeLesson() {
       onClick={onGoBackClick}/>
       <div className="mt-10">
         <h1 className="text-xl">{title}</h1>
-        <video className="h-[70%] mx-auto w-[70%] rounded-lg" controls>
+        
+        {!loading && <video className="h-[70%] mx-auto w-[70%] rounded-lg" controls autoPlay muted>
           <source
-            src={'http://localhost:5000/uploads/'+filename}
+            src={"http://localhost:5000/uploads/"+filename}
             type="video/mp4"
           />
           Your browser does not support the video tag.
-        </video>
+        </video>}
       </div>
       <div className="w-[70%] mt-10 mx-auto">
         <h1 className="text-2xl font-semibold">Description : </h1>
@@ -84,3 +91,5 @@ export default function TraineeLesson() {
     </div>
   );
 }
+
+
