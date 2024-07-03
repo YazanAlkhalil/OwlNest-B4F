@@ -46,7 +46,6 @@ function UserInCourseAdmin({ user, index, onUserRemoved , onRoleUpdated}) {
                 onUserRemoved();
             }
         } catch (error) {
-            console.log(error.message);
         }
     };
 

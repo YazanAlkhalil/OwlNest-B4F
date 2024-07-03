@@ -26,7 +26,6 @@ export default function TraineeCourses(props) {
     else{
       setCourses(data)
     }
-    console.log(data);
   }
   useEffect(()=>{
     getCourses()

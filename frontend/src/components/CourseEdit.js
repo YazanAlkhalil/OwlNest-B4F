@@ -26,7 +26,6 @@ function CourseEdit() {
     description:"",
     image:""
   })
-  console.log(content);
   const {id} = useParams()
   const getDetails = async ()=>{
     const res = await fetch(`http://localhost:5000/api/trainer/courses/${id}/content`,

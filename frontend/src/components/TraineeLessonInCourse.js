@@ -11,7 +11,6 @@ function TraineeLessonInCourse(lesson) {
         else if (icon === "pdf") return <FaRegFilePdf />;
         else return <PiExam />;
       }
-      console.log();
       const displayLesson = async ()=>{
         navigate(lesson.lesson.type)
         localStorage.setItem('lessonId',lesson.lesson._id)

@@ -55,7 +55,6 @@ export default function TraineeCourseDisplay() {
         credentials:'include'
       })
       const data = await res.json()
-      console.log(data);
       if(!res.ok){
         toast.error(data.msg)
       }
