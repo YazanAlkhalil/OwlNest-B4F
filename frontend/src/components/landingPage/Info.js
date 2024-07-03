@@ -3,8 +3,7 @@ import'./info.css'
 
 function info(props) {
   return (
-    <div>
-      <></>  
+    <div> 
       <div className='learn'>
         <b>{props.string1}</b>
       </div>

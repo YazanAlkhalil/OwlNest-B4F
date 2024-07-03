@@ -23,3 +23,6 @@
     color: white;
     margin-left: 50px;
 }
+.start:hover {
+    background-color: #0099ff;
+}

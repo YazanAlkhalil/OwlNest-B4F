@@ -7,12 +7,12 @@ function Courses() {
       <div className='add' >
         <b >Add courses suggestions</b>
       </div>
-      <div className='html'>
-        <p>HTML</p>
-        <p>express</p>
-        <p>React</p>
-        <p>marketing</p>
-        <p>English</p>
+      <div className='skills'>
+        <p className='html'>HTML</p>
+        <p className='html'>express</p>
+        <p className='html'>React</p>
+        <p className='html'>marketing</p>
+        <p className='html'>English</p>
       </div>
     </div>
   )
