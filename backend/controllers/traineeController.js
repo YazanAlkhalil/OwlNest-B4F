@@ -3,6 +3,7 @@ const Trainees = require('../models/traineeModel')
 const Course = require('../models/coursesModel')
 const crypto = require('crypto')
 const mongoose = require('mongoose');
+const { log } = require('console');
 
 
 const getCompanyCources = async (req, res) => {
@@ -47,36 +48,37 @@ const getlesson = async (req,res) => {
     try{
         const courseId = req.params.courseId;
         const lessonId = req.params.lessonId;
-        let courseObjectId = new mongoose.Types.ObjectId(courseId)
-        let lessonObjectId = new mongoose.Types.ObjectId(lessonId)
+        let courseObjectId = new mongoose.Types.ObjectId(courseId);
 
         let course = await Course.findOne({
             _id: courseObjectId,
-            content: { $elemMatch: { lessonid: lessonObjectId } }
         }).select("courseName content type");
-
         if (!course) {
         return res.status(404).json({ message: "Course or lesson not found" });
         }
 
-        const lesson = course.content.find((contentItem) => contentItem.lessonid.equals(lessonObjectId));
+        const lesson = course.content.find((contentItem) => contentItem._id === lessonId);
+        
         if (!lesson) {
         return res.status(404).json({ message: "Lesson not found" });
         }
 
-        if(course.type == "quiz"){
-        const { name ,grade, questions } = lesson;
-        return res.status(200).json({ courseName: course.courseName, name, grade, questions });
+        if(lesson.type == "quiz"){
+        const { title ,grade, questions } = lesson;
+        return res.status(200).json({ courseName: course.courseName, title, grade, questions });
         }
 
-        if(course.type == "video"){
-          const { name, content, description } = lesson;
-          return res.status(200).json({ courseName: course.courseName, name, content, description });
+        if(lesson.type == "video"){
+          const { title, filename, description } = lesson;
+          return res.status(200).json({ courseName: course.courseName, title, filename, description });
         }
 
-        if(course.type == "pdf"){
-          const { name, content } = lesson;
-          return res.status(200).json({ courseName: course.courseName, name, content });
+        if(lesson.type == "pdf"){
+          const { title, filename } = lesson;
+          return res.status(200).json({ courseName: course.courseName, title, filename });
+        }
+        else{
+          return res.status(404).json({msg:"type not found"})
         }
         
     } catch (error){
@@ -143,11 +145,8 @@ const lessonDone = async (req,res) => {
 
     let updateCompletionProgress = await Trainees.findOne({userId:loggedInUserId,courseId:courseId})
       updateCompletionProgress.completionProgress.push(lessonId)
+      updateCompletionProgress.XP += 10
       await updateCompletionProgress.save()
-
-      let updateXP = await Trainees.findOne({userId:loggedInUserId,courseId:courseId})
-      updateXP.XP += 10
-      await updateXP.save()
 
       res.status(200).send("done")
     }catch (error){
@@ -167,16 +166,15 @@ const progress = async (req,res) => {
     lessonsCount = lessonsCount.lessonsCount
     completionProgress = completionProgress/lessonsCount
 
-    let updateXP = await Trainees.findOne({userId:loggedInUserId,courseId:courseId})
-    const XP = updateXP.XP
+    const XP = updateCompletionProgress.XP
+    XP /= lessonsCount*10 *100
 
     let finalGrade = 0
-    let gradeArray = await Trainees.findOne({userId:loggedInUserId,courseId:courseId})
-    let grade = gradeArray.grade.map(grade => finalGrade += grade.grade ) 
-    grade = (grade/gradeArray.grade.length())
+    let grade = updateCompletionProgress.grade.map(grade => finalGrade += grade.grade ) 
+    grade = (grade/updateCompletionProgress.grade.length())
     
     //just add the % in the front 
-    res.status(200).send({completionProgress,XP,grade})
+    res.status(200).send({completionProgress,XP,grade,quizes:updateCompletionProgress.grade})
   }catch (error){
     res.status(500).send({Msg: error.message})
   }

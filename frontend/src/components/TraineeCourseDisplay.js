@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi';
 import Content from './Content';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ChatComponent from '../components/chatComponent'
 import { useDispatch } from 'react-redux';
 import { toggleChat } from '../RTK/slices/chatSlice';
+import toast from 'react-hot-toast';
+import TraineeLessonInCourse from './TraineeLessonInCourse';
 const lessons = [
   {
     id: 1,
@@ -43,7 +45,27 @@ const lessons2 = [
 
 
 export default function TraineeCourseDisplay() {
+  const [courseName ,setCourseName]= useState('')
+  const [content,setContent]= useState([])
   const navigate = useNavigate();
+  const {id}= useParams()
+  useEffect(() => {
+    const getData = async ()=>{
+      const res = await fetch('http://localhost:5000/api/trainee/courses/'+ id,{
+        credentials:'include'
+      })
+      const data = await res.json()
+      console.log(data);
+      if(!res.ok){
+        toast.error(data.msg)
+      }
+      else{
+        setCourseName(data.courseName) 
+        setContent(data.content)
+      }
+    }
+    getData()
+  },[])
   const onGoBackClick = () => {
     navigate('/trainee/courses');
   }
@@ -52,12 +74,19 @@ export default function TraineeCourseDisplay() {
     <div>
       <BiArrowBack className='size-6 hover:cursor-pointer' onClick={onGoBackClick} />
       <div className='p-5 font-black text-2xl'>
-        Course Name : Complete React Course
+        {courseName}
       </div>
       <div className='px-7'>
-        <Content unit={'Introduction'} lessons={lessons} />
-        <Content unit={'Unit 1'} lessons={lessons} />
-        <Content unit={'Unit 2'} lessons={lessons2} />
+
+        {
+          content.map((item)=>{
+            if(item.type ==='Unit'){
+              return <Content unit={item}/>
+            }
+            else
+              return <TraineeLessonInCourse lesson={item}/>
+          })
+        }
       </div>
       <div
         onClick={() => dispatch(toggleChat())}
