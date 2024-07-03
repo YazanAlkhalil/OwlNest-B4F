@@ -157,7 +157,6 @@ const lessonDone = async (req,res) => {
 
 const progress = async (req,res) => {
   try{
-    
     const loggedInUserId = req.user._id
     const courseId  = req.params.courseId
 
