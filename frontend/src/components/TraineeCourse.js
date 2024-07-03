@@ -28,5 +28,7 @@ export default function TraineeCourse(props) {
           {props.courseName}
         </div>
       </div>
-  )
+  );
 }
+
+export default TraineeCourse;

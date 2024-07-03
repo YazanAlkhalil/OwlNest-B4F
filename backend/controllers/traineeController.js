@@ -7,31 +7,31 @@ const { log } = require('console');
 
 
 const getCompanyCources = async (req, res) => {
-    const companyId = new mongoose.Types.ObjectId(req.params.companyId);
-    const loggedInUserId = req.user._id;
-  
-    try {
-      const courses = await Course.find({ companyId: companyId }).select("courseName image");
-      if (!courses.length) {
-        return res.status(404).json({ message: "No courses found" });
-      }
-  
-      const result = await Promise.all(courses.map(async (course) => {
-        const completionProgressDoc = await Trainees.find({ courseId: course._id, userId: loggedInUserId }).select("completionProgress");
-        const completionProgress = completionProgressDoc ? completionProgressDoc.completionProgress : 0;
-        return {
-            id: course._id,
-          courseName: course.courseName,
-          image: course.image,
-          completionProgress,
-        };
-      }));
-  
-      res.status(200).json(result);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Internal Server Error" });
+  const companyId = new mongoose.Types.ObjectId(req.params.companyId);
+  const loggedInUserId = req.user._id;
+
+  try {
+    const courses = await Course.find({ companyId: companyId }).select("courseName image");
+    if (!courses.length) {
+      return res.status(404).json({ message: "No courses found" });
     }
+
+    const result = await Promise.all(courses.map(async (course) => {
+      const completionProgressDoc = await Trainees.find({ courseId: course._id, userId: loggedInUserId }).select("completionProgress");
+      const completionProgress = completionProgressDoc ? completionProgressDoc.completionProgress : 0;
+      return {
+          id: course._id,
+        courseName: course.courseName,
+        image: course.image,
+        completionProgress,
+      };
+    }));
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 }
 
 const getcourseinfo = async (req,res) => {

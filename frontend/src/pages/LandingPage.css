@@ -2,5 +2,22 @@
     display: flex;
 }
 .teacher{
-   
-height: 680px;} 
+height: 600px;} 
+.three{
+    display: flex;
+    background-color: #DBF2FF;
+}
+.four{
+    /* width: 80vw; */
+
+}
+.divInfo{
+    display: flex;
+   justify-content: space-between;
+   margin-top: 20px;
+}
+.footer{
+    height: 215px;
+    background: #003356;
+    padding: 10px;
+}

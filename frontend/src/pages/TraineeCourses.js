@@ -37,15 +37,10 @@ export default function TraineeCourses(props) {
     
   
   return (
-    <>
-    <div className="grid grid-cols-3 gap-x-24 gap-y-20 ">
-      {
-        courses.map(course => (
-          <TraineeCourse {...course}/>
-        ))
-      }
-    </div>
-
-    </>
-  )
+      <div className="grid grid-cols-3 gap-x-24 gap-y-20">
+          {courses.map(course => (
+              <TraineeCourse key={course.id} {...course} />
+          ))}
+      </div>
+  );
 }
