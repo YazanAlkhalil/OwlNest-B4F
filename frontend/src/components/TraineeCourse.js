@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import def from '../assets/images/default-course-thumbnail.png'
 
 
-export default function TraineeCourse(props) {
+function TraineeCourse(props) {
     const navigate = useNavigate();
     const handleClickCourse = () => {
       navigate(`${props.id}/content`);
