@@ -9,35 +9,34 @@ import { BiSearch } from 'react-icons/bi';
 import { FormControlLabel, Switch } from '@mui/material';
 import UserInCourse from './UserInCourse';
 import toast from 'react-hot-toast';
+import { useParams } from 'react-router-dom';
 
 function AdminCourseUsers() {
   const [data, setData] = React.useState([]);
   const [searchValue, setSearchValue] = React.useState('');
   const [filteredData, setFilteredData] = React.useState([]);
   const [isParticipantOnly, setIsParticipantOnly] = React.useState(false);
+  const { id } = useParams();
 
   const handleSearch = (e) => {
     setSearchValue(e.target.value.toLowerCase());
   };
 
-  const fetchData = async () => {
-    try {
-      const courseId = localStorage.getItem('courseId'); // افترض أننا نخزن معرف الدورة في التخزين المحلي
-      const response = await fetch(`/api/courses/${courseId}/users`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const result = await response.json();
-      setData(result);
-      setFilteredData(result);
-    } catch (error) {
-      toast.error('Failed to fetch users');
-      console.error('Fetch error:', error);
+  const getUsersFromCourses = async () => {
+    const res = await fetch(`http://localhost:5000/api/admin/courses/${id}/users`, {
+      credentials: 'include'
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      toast.error(data.msg);
+    } else {
+      setData(data);
+      setFilteredData(data);
     }
   };
 
   React.useEffect(() => {
-    fetchData();
+    getUsersFromCourses();
   }, []);
 
   React.useEffect(() => {
@@ -83,7 +82,7 @@ function AdminCourseUsers() {
         <div className='bg-secondary text-white p-4'>Completion date</div>
         <div className='bg-secondary text-white p-4 rounded-r'>Add/Remove</div>
         {filteredData.map((user, index) => (
-          <UserInCourse key={JSON.stringify(user)} user={user} index={index} />
+          <UserInCourse key={user._id} user={user} index={index} refreshData={getUsersFromCourses} />
         ))}
       </div>
     </div>
