@@ -32,7 +32,7 @@ function LandingPage() {
          <Event/>   
          <File/>
          <div className='divInfo'>
-          <Info string1={"Learn anything"} string2={"Take any interesting or popular topic, establish the basic requirements and develop the skills of others"}/>
+          <Info string1={"Teach anything"} string2={"Take any interesting or popular topic, establish the basic requirements and develop the skills of others"}/>
           <Info string1={"Save time and money"} string2={"Spend less time and money on your education with a ready-made application that meets your needs"}/>
           <Info string1={"Granting certificates"} string2={"You can award a certificate for any training course you offer"}/>
          </div>
