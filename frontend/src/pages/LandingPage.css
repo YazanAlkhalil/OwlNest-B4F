@@ -3,24 +3,24 @@
     justify-content: space-between;
 }
 .one img{
-    margin-bottom: 45px;
+    /* margin-bottom: 45px; */
 }
-.teacher{
-    height: 600px;
-} 
+
 .three{
     display: flex;
     background-color: #DBF2FF;
-    justify-content: space-evenly;
+
 }
 .three img{
-    margin-top: 30px;
-    height: 400px;
+    margin-right: 200px;
+    height: 600px;
 }
+
 .four{
     /* width: 80vw; */
 
 }
+
 .divInfo{
     display: flex;
    justify-content: space-evenly;

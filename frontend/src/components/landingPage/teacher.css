@@ -7,7 +7,7 @@ font-family: Poppins;
 font-size: 40px;
 width: 432px;
 height: 400px;
-margin-left: 200px;
+/* margin-left: 200px; */
 margin-top: 30px;
 }
 .owlnest{
@@ -25,6 +25,7 @@ color: white;
 font-family: Poppins;
 font-size: 20px;
 margin: 0 0 50px 250px;
+margin-left: 80px;
 }
 .get:hover{
     background-color: #097cff;
