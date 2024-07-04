@@ -11,7 +11,7 @@
 }
 .logoNav{
     color: white;
-    font-size: 40px;
+    font-size: 30px;
 }
 .divSearch{
     width: 451px;
@@ -31,10 +31,16 @@
     color: white;
     margin-right: 20px;
 }
+.login:hover {
+    background-color: #0099ff;
+}
 .register{
     width: 105px;
     height: 45px;
     border: white 1px solid;
     border-radius: 30px;
     color: white;
+}
+.register:hover {
+    background-color: #0099ff;
 }

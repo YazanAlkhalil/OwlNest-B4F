@@ -58,7 +58,6 @@ function UserInCourse({ user, index, refreshData }) {
             credentials : 'include',
         })
         const data = await res.json();
-        console.log(data);
         if(!res.ok){
             toast.error(data.msg)
         }else {

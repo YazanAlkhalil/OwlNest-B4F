@@ -56,7 +56,7 @@ function App() {
 
           {/* trainee routes */}
           <Route path="/trainee" element={<TraineeLayout />}>
-          <Route path="/trainee/" element={<Navigate to="/trainee/homepage" replace />} />
+            <Route path="/trainee/" element={<Navigate to="/trainee/homepage" replace />} />
 
             <Route path="/trainee/homePage" element={<TranieeDashboard />} />
 

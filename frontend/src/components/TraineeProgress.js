@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "react-circular-progressbar/dist/styles.css";
 import CrcularProgressBar from "./CrcularProgressBar";
 import QuizPassed from "./QuizPassed";
+import { useParams } from "react-router-dom";
 
 export default function TraineeProgress() {
+  const {id} = useParams()
+  useEffect(()=>{
+    const getProgress = async ()=>{
+      const res= await fetch(`http://localhost:5000/api/trainee/courses/${id}/progress`,{
+        credentials:'include'
+      })
+      const data = await res.json()
+    }
+    getProgress()
+  },[])
   const value = 60;
   const value2 = 80;
   return (

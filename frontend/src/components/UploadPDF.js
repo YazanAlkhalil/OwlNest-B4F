@@ -36,7 +36,6 @@ function UploadPDF({ submit,getData }) {
       }
 
       const data = await response.json();
-      console.log('Upload successful:', data);
       // Reset form fields after successful upload
       setName('');
       setFile(null);

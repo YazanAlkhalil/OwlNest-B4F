@@ -1,35 +1,38 @@
 const mongoose = require('mongoose')
 
 const traineeSchema = mongoose.Schema({
-    courseId : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "Course"
+    courseId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course"
     },
-    userId : {
-        type : mongoose.Schema.Types.ObjectId,
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Users"
     },
-    grade : [{
+    grade: [{
         _id: mongoose.Schema.Types.ObjectId,
         grade: Number,
         Date: {
-            type:Date,
+            type: Date,
             default: Date.now
         }
     }],
-    completionProgress : [
-        {
-            type: String
-        }
-    ],
-    completionDate : {
-        type : Date
+    completionProgress: {
+        type: [
+            {
+                type: String
+            }
+        ],
+        default:[]
     },
-    XP : {
-        type : Number
+    completionDate: {
+        type: Date
+    },
+    XP: {
+        type: Number
     }
 })
 
-const Trainee = mongoose.model('Trainee',traineeSchema);
+const Trainee = mongoose.model('Trainee', traineeSchema);
 
 module.exports = Trainee;
